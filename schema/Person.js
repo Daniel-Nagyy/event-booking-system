@@ -31,7 +31,7 @@ const personSchema = new Schema({
       },
     profilePicture: {
       type: String,
-      default: "default.jpg",
+      default: "Resources\default.jpg",
     },
     Booking: [{
         type: Schema.Types.ObjectId,

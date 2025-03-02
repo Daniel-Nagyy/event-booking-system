@@ -51,10 +51,14 @@ const eventSchema = Schema({
         type: Number,
         price: Number,
         totalNumber: Number,
-        remainingTickets: totalNumber-Booking.length.,
+        Booking: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Booking'
+        }],
+        remainingTickets: totalNumber-Booking.length,
         required: true
     }],
-    image = {
+    image: {
         type: String,
         default: "default.jpg"
     }
