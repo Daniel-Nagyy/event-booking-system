@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-
+const Event = require('./Event');
+const User = require('./User');
 const bookingSchema = new Schema({
     BookingID: {
         type: Number,
@@ -24,4 +25,5 @@ const bookingSchema = new Schema({
         enum: ["Pending", "Confirmed", "Cancelled"],
         default: "Pending"
     }
+    
 });

@@ -55,7 +55,9 @@ const eventSchema = Schema({
             type: Schema.Types.ObjectId,
             ref: 'Booking'
         }],
-        remainingTickets: totalNumber-Booking.length,
+        remainingTickets: totalNumber-,
+        //TODO booking.length is not the actual number of tickets sold
+        //TODO remainingTickets = totalNumber - actual number of tickets sold for this event
         required: true
     }],
     image: {
