@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Event = require('./Event');
-const User = require('./User');
+const User = require('User');
 const bookingSchema = new Schema({
     BookingID: {
         type: Number,
@@ -10,20 +10,26 @@ const bookingSchema = new Schema({
     },
     event: {
         type: Schema.Types.ObjectId,
-        ref: 'Event'
+        ref: 'Event',
+        required: true
+
     },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
+    ticketsBooked: { 
+        type: Number, required: true
+     },
+    totalPrice: { 
+        type: Number, required: true 
     },
     bookingStatus: {
         type: String,
         enum: ["Pending", "Confirmed", "Cancelled"],
         default: "Pending"
-    }
+    },
+
+    timestamps:true
     
 });

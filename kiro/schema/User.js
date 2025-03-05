@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const personSchema = new Schema({
+const UserSchema = new Schema({
     UserID: {
         type: Number,
         required: true,
@@ -40,5 +40,5 @@ const personSchema = new Schema({
     timestamps: true 
 
 });
-const Person = mongoose.model('Person', personSchema);
-module.exports = Person;
+const User = mongoose.model('User', UserSchema);
+module.exports = User;

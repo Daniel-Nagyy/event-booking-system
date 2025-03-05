@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const OrganizerSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Person',
+        ref: 'user',
         required: true
     },
     events: [{
