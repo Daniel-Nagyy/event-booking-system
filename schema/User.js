@@ -33,10 +33,6 @@ const UserSchema = new Schema({
       type: String,
       default: "Resources\default.jpg",
     },
-    Booking: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Booking'
-    }],
     timestamps: true 
 
 });
