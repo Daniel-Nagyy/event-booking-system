@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const OrganizerSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Person',
+        ref: 'user',
         required: true
     },
     events: [{
@@ -11,4 +11,4 @@ const OrganizerSchema = new mongoose.Schema({
     }]
 });
 
-const Organizer = Person.discriminator("Organizer", OrganizerSchema);
+const Organizer = User.discriminator("Organizer", OrganizerSchema);
