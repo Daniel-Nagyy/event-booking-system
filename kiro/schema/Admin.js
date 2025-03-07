@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const AdminSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Person',
+        ref: 'User',
         required: true
     },
     Permissions: [{

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Booking = require('./Booking');
+const Organizer = require("organizer")
 const Schema = mongoose.Schema;
 
 
@@ -27,6 +28,10 @@ const eventSchema = Schema({
         min: 6,
         max: 255
     },
+    category:{
+        type: string,
+        required : true
+    },
     date: {
         type: Date,
         required: true
@@ -37,34 +42,28 @@ const eventSchema = Schema({
     },
     organizer: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Organizer'
     },
-    participants: [{
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    }],
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    tickets: [{
-        type: Number,
-        price: Number,
-        totalNumber: Number,
-        Booking: [{
-            type: Schema.Types.ObjectId,
-            ref: 'Booking'
-        }],
-        remainingTickets: totalNumber-,
-        //TODO booking.length is not the actual number of tickets sold
-        //TODO remainingTickets = totalNumber - actual number of tickets sold for this event
-        required: true
-    }],
+    totalTickets: {
+         type: Number, required: true
+         },
+    remainingTickets: {
+         type: Number, default: function () { return this.totalTickets; } 
+        },
+
     image: {
         type: String,
         default: "default.jpg"
-    }
+    },
+    
+timestamps:true
+ 
+    
 });
 
+EventSchema.methods.updateRemainingTickets = function (bookings) {
+    this.remainingTickets = this.totalTickets - bookings;
+    return this.save();
+};
 
 module.exports = mongoose.model('Event', eventSchema);
