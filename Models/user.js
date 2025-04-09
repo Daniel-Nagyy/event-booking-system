@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+
 const UserSchema = new Schema({
     UserID: {
         type: Number,
@@ -17,7 +18,7 @@ const UserSchema = new Schema({
         required: true,
         unique: true,
         lowercase: true,
-      },
+    },
     password: {
         type: String,
         required: true,
@@ -28,13 +29,14 @@ const UserSchema = new Schema({
         type: String,
         enum: ["User", "Organizer", "Admin"], 
         default: "User",
-      },
-    profilePicture: {
-      type: String,
-      default: "Resources\default.jpg",
     },
-    timestamps: true 
-
+    profilePicture: {
+        type: String,
+        default: "Resources/default.jpg",  // Use forward slash for paths
+    }
+}, {
+    timestamps: true  // Move this to the schema options
 });
+
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
