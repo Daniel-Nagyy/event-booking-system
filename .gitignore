@@ -17,17 +17,17 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Ignore build files
-build/
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore build output
 dist/
-out/
+build/
 
 # Ignore coverage reports
 coverage/
 
-# Ignore .DS_Store files
-.DS_Store
-
-# Ignore json files 
-package.json
-package-lock.json
+# Ignore temporary files
+*.tmp
+*.temp
