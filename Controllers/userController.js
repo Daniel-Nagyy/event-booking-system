@@ -34,9 +34,9 @@ const userController = {
 
 
         },
-        getAllUsers: async((req,res)=>{
+    getAllUsers: async (req,res)=>{
             try {
-                const users = UserModel.find();
+                const users = await UserModel.find();
                 return res.status(200).json(users);
             }
             catch(error)
@@ -44,7 +44,7 @@ const userController = {
                 return res.status(500).json({message: error.message});
             }
         
-         } )
+         } 
     }
 
     module.exports = userController;

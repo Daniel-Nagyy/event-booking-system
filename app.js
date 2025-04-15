@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const User = require("./Models/user");
 const app = express();
 const authRouter = require("./Routes/auth");
+const userRouter = require("./Routes/user");
+const authorizationMiddleware = require("./Middleware/authorizationMiddleware");
 require('dotenv').config();
 
 // Middleware to parse JSON body
@@ -24,3 +26,5 @@ mongoose
   });
 
   app.use("/api/v1",authRouter); 
+  //app.use(authorizationMiddleware);
+  app.use ("/api/v1",userRouter);
