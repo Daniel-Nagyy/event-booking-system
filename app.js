@@ -53,3 +53,30 @@ mongoose
     );
   })
   .catch((err) => console.error('Mongo error:', err));
+
+
+  // app.js
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const authRoutes = require('./routes/authRoutes');
+
+dotenv.config();
+
+
+// Middleware to parse JSON
+app.use(express.json());
+
+// Public routes
+app.use('/api/v1', authRoutes);
+
+// Connect to MongoDB
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('MongoDB connected');
+    app.listen(process.env.PORT, () =>
+      console.log(`Server running on port ${process.env.PORT}`)
+    );
+  })
+  .catch((err) => console.error('Mongo error:', err));
