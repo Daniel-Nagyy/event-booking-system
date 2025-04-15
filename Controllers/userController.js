@@ -89,5 +89,16 @@ catch (error){
 
     module.exports = userController;
 
-
+    exports.getUserProfile = async (req, res) => {
+        if (!req.user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+      
+        res.json({
+          id: req.user._id,
+          name: req.user.name,
+          email: req.user.email,
+        });
+      };
+      
 

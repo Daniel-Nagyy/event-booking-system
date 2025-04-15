@@ -32,3 +32,24 @@ mongoose
   app.use("/api/v1",authRouter); 
   app.use(authorizationMiddleware);
   app.use ("/api/v1",userRouter);
+  //asd
+  const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const userRoutes = require('./routes/userRoutes');
+
+dotenv.config();
+
+
+app.use(express.json());
+app.use('/api/v1/users', userRoutes);
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('MongoDB connected');
+    app.listen(process.env.PORT, () =>
+      console.log(`Server running on port ${process.env.PORT}`)
+    );
+  })
+  .catch((err) => console.error('Mongo error:', err));
