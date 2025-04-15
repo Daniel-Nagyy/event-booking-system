@@ -104,3 +104,29 @@ mongoose
     );
   })
   .catch((err) => console.error('Mongo error:', err));
+
+  // app.js
+const express = require('express');
+const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const eventRoutes = require('./routes/eventRoutes');
+
+dotenv.config();
+
+
+// Middleware to parse JSON
+app.use(express.json());
+
+// Public Routes
+app.use('/api/v1/events', eventRoutes);
+
+// Connect to MongoDB
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log('MongoDB connected');
+    app.listen(process.env.PORT, () =>
+      console.log(`Server running on port ${process.env.PORT}`)
+    );
+  })
+  .catch((err) => console.error('MongoDB error:', err));
