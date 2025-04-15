@@ -14,3 +14,12 @@ const { protect } = require('../middleware/authMiddleware');
 router.get('/profile', protect, getUserProfile);
 
 module.exports = router;
+// routes/userRoutes.js
+
+const { deleteUser } = require("../Controllers/userController");
+const { protect, isAdmin } = require('../middleware/authMiddleware');
+
+// DELETE /api/v1/users/:id - Admins can delete users
+router.delete('/:id', protect, isAdmin, deleteUser);
+
+module.exports = router;

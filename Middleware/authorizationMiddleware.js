@@ -76,3 +76,34 @@ exports.updatePassword = async (req, res) => {
     res.status(500).json({ error: 'Something went wrong' });
   }
 };
+// middleware/authMiddleware.js
+const jwt = require('jsonwebtoken');
+const User = require('../Models/user.js');
+
+exports.protect = async (req, res, next) => {
+  let token;
+
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    try {
+      token = req.headers.authorization.split(' ')[1];
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.user = await User.findById(decoded.id).select('-password');
+      next();
+    } catch (err) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+  } else {
+    return res.status(401).json({ message: 'No token provided' });
+  }
+};
+
+exports.isAdmin = (req, res, next) => {
+  if (req.user && req.user.role === 'admin') {
+    next();  // User is admin, allow them to proceed
+  } else {
+    return res.status(403).json({ message: 'Not authorized as admin' });
+  }
+};
