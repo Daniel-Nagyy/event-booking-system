@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Booking = require('./Booking');
-const Organizer = require("./organizer")
+const Organizer = require("./Organizer")
 const Schema = mongoose.Schema;
 
 

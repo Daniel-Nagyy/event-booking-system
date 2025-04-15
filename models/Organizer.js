@@ -12,4 +12,7 @@ const OrganizerSchema = new mongoose.Schema({
     }]
 });
 
-const Organizer = User.discriminator("Organizer", OrganizerSchema);
+// Prevent redefining the discriminator
+const Organizer = mongoose.models.Organizer || User.discriminator("Organizer", OrganizerSchema);
+
+module.exports = Organizer;

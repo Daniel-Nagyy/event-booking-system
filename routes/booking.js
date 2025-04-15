@@ -4,10 +4,4 @@ const bookingController = require('../Controllers/bookingController');
 const authorizationMiddleware= require('../Middleware/authorizationMiddleware');
 const router = express.Router();
 
-//get current user bookings
-router.get('/users/bookings', authorizationMiddleware(["user"]), bookingController.getUserBookings);
-
-//get organizer anyltics
-router.get('/users/events/analytics', authorizationMiddleware(["organizer"]), userController.getOrganizerAnalytics);
-
 module.exports = router;

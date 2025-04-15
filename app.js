@@ -7,8 +7,9 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const userRoutes = require("./routes/user");
 const bookingRoutes = require("./routes/booking");
+const eventRoutes = require("./routes/event");
 const authRoutes = require("./routes/auth");
-const authrizationMiddleware = require("./middleware/authorizationMiddleware");
+const authrizationMiddleware = require("./Middleware/authorizationMiddleware");
 
 require('dotenv').config();
 
@@ -32,6 +33,8 @@ app.use(authrizationMiddleware);
 app.use("/api/v1/user", userRoutes);
 //to get the booking
 app.use("/api/v1/booking", bookingRoutes);
+//to get the event
+app.use("/api/v1/event", eventRoutes);
 
 const db_name = process.env.DB_NAME;
 // * Cloud Connection
