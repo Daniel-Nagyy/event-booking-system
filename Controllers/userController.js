@@ -1,4 +1,5 @@
 const UserModel = require("../Models/user");
+const eventModel = require("../Models/Event");
 const jwt = require("jsonwebtoken");
 const bycrypt = require("bcrypt");
 require("dotenv").config();
@@ -44,8 +45,47 @@ const userController = {
                 return res.status(500).json({message: error.message});
             }
         
-         } 
+         } ,
+    
+
+    updateUser: async (req,res)=> {
+        try {
+            const user = await UserModel.findByIdAndUpdate(
+                req.params.UserID,
+                {
+                    name: req.body.name,
+                    email: req.body.email,
+                    profilePicture: req.profilePicture
+                },
+                {
+                    new: true,
+                }
+            );
+            return res.status(200).json({user,msg:"User updated successfully"});
+            
+        }
+        catch (error)
+        {
+            return res.status(500).json({message: error.message});
+        }
+    },
+
+    getUserEvents: async(req,res)=>
+    {
+try {
+    const userID = req.user._id;
+    const events = await eventModel.find({participants: userID})
+    if(events.length ==0)
+    {
+        return res.status(200).json({message: "no events found for the user"});
     }
+    return res.status(200).json(events);
+}
+catch (error){
+    return res.status(500).json({message: "error getting events"});
+}
+    }
+}
 
     module.exports = userController;
 

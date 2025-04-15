@@ -1,9 +1,10 @@
 const mongoose = require("mongoose");
 const Booking = require("./Booking");
-const Organizer = require("organizer");
+const User = require("./user");
+const Organizer = require("./Organizer");
 const Schema = mongoose.Schema;
 
-const eventSchema = Schema({
+const eventSchema = new Schema({
   EventID: {
     type: Number,
     required: true,
@@ -28,7 +29,7 @@ const eventSchema = Schema({
     max: 255,
   },
   category: {
-    type: string,
+    type: String,
     required: true,
   },
   date: {
@@ -59,16 +60,13 @@ const eventSchema = Schema({
       return this.totalTickets;
     },
   },
-
   image: {
     type: String,
     default: "default.jpg",
-  },
+  }
+}, { timestamps: true });
 
-  timestamps: true,
-});
-
-EventSchema.methods.updateRemainingTickets = function (bookings) {
+eventSchema.methods.updateRemainingTickets = function (bookings) {
   this.remainingTickets = this.totalTickets - bookings;
   return this.save();
 };

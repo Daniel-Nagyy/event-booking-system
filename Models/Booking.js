@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const Event = require("./Event");
-const User = require("User");
+const User = require("./user");
+
 const bookingSchema = new Schema({
   BookingID: {
     type: Number,
@@ -29,7 +30,7 @@ const bookingSchema = new Schema({
     type: String,
     enum: ["Pending", "Confirmed", "Cancelled"],
     default: "Pending",
-  },
+  }
+}, { timestamps: true });
 
-  timestamps: true,
-});
+module.exports = mongoose.model("Booking", bookingSchema);

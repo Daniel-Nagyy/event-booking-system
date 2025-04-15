@@ -1,18 +1,22 @@
 const express = require('express');
 const mongoose = require("mongoose");
+const cookieParser=require('cookie-parser')
 const User = require("./Models/user");
 const app = express();
 const authRouter = require("./Routes/auth");
 const userRouter = require("./Routes/user");
+
 const authorizationMiddleware = require("./Middleware/authorizationMiddleware");
 require('dotenv').config();
 
 // Middleware to parse JSON body
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser())
+const DB_URL = process.env.DB_URL;
 mongoose
   .connect(
-    "mongodb+srv://kiroreda750:123456789kiro@main.f9n4gce.mongodb.net/?retryWrites=true&w=majority&appName=Main",
+    process.env.DB_URL,
   )
   .then(() => console.log("MongoDB connected"))
   .catch((e) => {
@@ -26,5 +30,5 @@ mongoose
   });
 
   app.use("/api/v1",authRouter); 
-  //app.use(authorizationMiddleware);
+  app.use(authorizationMiddleware);
   app.use ("/api/v1",userRouter);
