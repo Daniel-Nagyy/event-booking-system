@@ -35,6 +35,49 @@ const userController = {
 
 
         },
+        login: async (req, res) => {
+            try {
+              const { email, password } = req.body;
+        
+              // Find the user by email
+              const user = await UserModel.findOne({ email });
+              if (!user) {
+                return res.status(404).json({ message: "email not found" });
+              }
+        
+              console.log("password: ", user.password);
+              // Check if the password is correct
+        
+              const passwordMatch = await bycrypt.compare(password, user.password);
+              if (!passwordMatch) {
+                return res.status(405).json({ message: "incorect password" });
+              }
+        
+              const currentDateTime = new Date();
+              const expiresAt = new Date(+currentDateTime + 1800000); // expire in 3 minutes
+              // Generate a JWT token
+              const token = jwt.sign(
+                { user: { UserID: user._id, role: user.role } },
+                secretKey,
+                {
+                  expiresIn: 3 * 60 * 60,
+                }
+              );
+        
+              return res
+                .cookie("token", token, {
+                  expires: expiresAt,
+                  httpOnly: true,
+                  secure: true, // if not working on thunder client , remove it
+                  SameSite: "none",
+                })
+                .status(200)
+                .json({ message: "login successfully", user });
+            } catch (error) {
+              console.error("Error logging in:", error);
+              res.status(500).json({ message: "Server error" });
+            }
+          },
     getAllUsers: async (req,res)=>{
             try {
                 const users = await UserModel.find();
