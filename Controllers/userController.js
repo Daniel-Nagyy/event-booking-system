@@ -129,51 +129,6 @@ catch (error){
 }
     },
 
-
-    login: async(req,res)=>{
-       try{
-        const {email, password} = req.body;
-
-        const user = await UserModel.findOne({email})
-        //find user by email
-        if(!user){
-            return res.status(404).json({message:"email not found"});
-        }
-
-        //check if password is correct
-        const passwordMatch = await bcrypt.compare(password, user.password)
-        if(!passwordMatch){
-            return res.status(405).json({message: "incorrect Password"});
-        }
-
-
-        const currentDateTime = new Date();
-        const expiresAt = new Date(currentDateTime + 18000000)//expires after 3 minutes
-        //Generate jwt token 
-        const token = jwt.sign(
-            
-            {user: {userID: user._id, role: user.role}},
-            secretKey,
-            {expiresIn: 3*60*60,},
-            
-        );
-        
-        return res
-        .cookie("token", token, {
-          expires: expiresAt,
-          httpOnly: true,
-          secure: true, // keep it during dev
-          SameSite: "none",
-        })
-        .status(200)
-        .json({ message: "login successfully", user });
-    }
-    catch(err){
-        console.error("Error logging in:", error);
-        res.status(500).json({ message: "Server error" });
-    }
-    }, 
-
 }
 
     module.exports = userController;
