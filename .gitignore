@@ -31,3 +31,6 @@ coverage/
 # Ignore temporary files
 *.tmp
 *.temp
+
+#ignore curl files
+*.rest

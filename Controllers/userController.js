@@ -34,7 +34,7 @@ const userController = {
             
 
 
-        },
+    },
     getAllUsers: async (req,res)=>{
             try {
                 const users = await UserModel.find();
@@ -48,7 +48,8 @@ const userController = {
          } ,
     
 
-    updateUser: async (req,res)=> {
+    updateUser: async (req,res)=>
+    {
         try {
             const user = await UserModel.findByIdAndUpdate(
                 req.params.UserID,
@@ -72,65 +73,89 @@ const userController = {
 
     getUserEvents: async(req,res)=>
     {
-try {
-    const userID = req.user._id;
-    const events = await eventModel.find({participants: userID})
-    if(events.length ==0)
-    {
-        return res.status(200).json({message: "no events found for the user"});
-    }
-    return res.status(200).json(events);
-}
-catch (error){
-    return res.status(500).json({message: "error getting events"});
-}
+        try {
+            const userID = req.user._id;
+            const events = await eventModel.find({participants: userID})
+            if(events.length ==0)
+            {
+                return res.status(200).json({message: "no events found for the user"});
+            }
+            return res.status(200).json(events);
+        }
+        catch (error){
+            return res.status(500).json({message: "error getting events"});
+        }
     },
 
 
-    login: async(req,res)=>{
+    login: async(req,res)=>
+    {
        try{
-        const {email, password} = req.body;
+            const {email, password} = req.body;
 
-        const user = await UserModel.findOne({email})
-        //find user by email
-        if(!user){
-            return res.status(404).json({message:"email not found"});
-        }
+            const user = await UserModel.findOne({email})
+            //find user by email
+            if(!user){
+                return res.status(404).json({message:"email not found"});
+            }
 
-        //check if password is correct
-        const passwordMatch = await bcrypt.compare(password, user.password)
-        if(!passwordMatch){
-            return res.status(405).json({message: "incorrect Password"});
-        }
+            const passwordMatch = await bcrypt.compare(password, user.password)
+            if(!passwordMatch){
+                return res.status(405).json({message: "incorrect Password"});
+            }
 
 
-        const currentDateTime = new Date();
-        const expiresAt = new Date(currentDateTime + 18000000)//expires after 3 minutes
-        //Generate jwt token 
-        const token = jwt.sign(
+            const currentDateTime = new Date();
+            const expiresAt = new Date(currentDateTime + 18000000)//expires after 3 minutes
+            //Generate jwt token 
+            const token = jwt.sign(
+                
+                {user: {userID: user._id, role: user.role}},
+                secretKey,
+                {expiresIn: 3*60*60,},
+                
+            );
             
-            {user: {userID: user._id, role: user.role}},
-            secretKey,
-            {expiresIn: 3*60*60,},
-            
-        );
-        
-        return res
-        .cookie("token", token, {
-          expires: expiresAt,
-          httpOnly: true,
-          secure: true, // keep it during dev
-          SameSite: "none",
-        })
-        .status(200)
-        .json({ message: "login successfully", user });
-    }
-    catch(err){
-        console.error("Error logging in:", error);
-        res.status(500).json({ message: "Server error" });
-    }
+            return res
+            .cookie("token", token, {
+            expires: expiresAt,
+            httpOnly: true,
+            secure: true, // keep it during dev
+            SameSite: "none",
+            })
+            .status(200)
+            .json({ message: "login successfully", user });
+        }
+        catch(err){
+            console.error("Error logging in:", error);
+            res.status(500).json({ message: "Server error" });
+        }
     }, 
 
+    updateRole: async (req, res)=>{
+        try
+        {
+            const newRole = req.newRole
+
+            if(!newRole) return res.status(400).message("Empty role")
+
+            const user = await UserModel.findByIdAndUpdate(req.params.UserID,
+
+                {
+                    role: req.body.role
+                },
+                {
+                    new: true, 
+                }
+            );
+            return res.status(200).message("Role Updated Successfully")
+            
+        }
+        catch(err)
+        {
+            return res.status(500).json({message: error.message});
+        }
+    }
 }
 
     module.exports = userController;
