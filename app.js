@@ -7,8 +7,9 @@ const app = express();
 const userRoutes = require("./Routes/user");
 const eventRoutes = require("./Routes/event");
 const authRoutes = require("./Routes/auth");
-const authrizationMiddleware = require("./Middleware/authorizationMiddleware");
 const authenticationMiddleware=require('./Middleware/authenticationMiddleware');
+const authrizationMiddleware = require("./Middleware/authorizationMiddleware");
+
 const cors = require("cors");
 
 

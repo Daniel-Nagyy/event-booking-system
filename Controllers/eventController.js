@@ -1,4 +1,4 @@
-const eventModel = require('./models/Event');
+const eventModel = require('../Models/Event');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
