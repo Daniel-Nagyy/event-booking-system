@@ -1,4 +1,4 @@
-const eventModel = require('../models/Event');
+const eventModel = require('./models/Event');
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const secretKey = process.env.SECRET_KEY;

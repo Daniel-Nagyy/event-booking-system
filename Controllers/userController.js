@@ -144,13 +144,13 @@ catch (error){
         } catch (error) {
             return res.status(500).json({ message: 'error', message: error.message });
         }
-    }
-}
-
-    module.exports = userController;
+    },
 
 
 
+
+    getUserEvents: async(req,res)=>
+        {
         try {
             const userID = req.user._id;
             const events = await eventModel.find({participants: userID})

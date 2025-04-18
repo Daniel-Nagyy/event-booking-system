@@ -17,8 +17,8 @@ const bookingController = {
     catch (error) {
       return res.status(500).json({ message: 'Internal server error' });
     }
-  }
   },
+  
   createBooking: async (req, res) => {
     try {
         const { eventId, userId, bookingDate } = req.body;
@@ -50,6 +50,7 @@ deleteBooking: async (req, res) => {
         console.error("Error deleting booking:", error);
         res.status(500).json({ message: "Error deleting booking" });
     }
+}
 };
 
 module.exports = bookingController;

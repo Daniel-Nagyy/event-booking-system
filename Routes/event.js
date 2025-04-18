@@ -1,7 +1,7 @@
 // routes/eventRoutes.js
 const express = require('express');
 const router = express.Router();
-const eventController = require("../Controllers/eventController");
+const eventController = require("../Controllers/eventController").default;
 const authorizationMiddleware = require("../Middleware/authorizationMiddleware");
 // Create a new eventModel
 router.post('/events', authorizationMiddleware(['organizer']), eventController.createEvent);
