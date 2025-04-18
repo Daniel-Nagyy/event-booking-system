@@ -29,7 +29,7 @@ app.use(
 //to verify the user token
 app.use("/api/v1", authRoutes);
 //to check if the user is authrized 
-//app.use(authrizationMiddleware);
+app.use(authrizationMiddleware);
 //to get the user booking
 app.use("/api/v1/user", userRoutes);
 //to get the booking

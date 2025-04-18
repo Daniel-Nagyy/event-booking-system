@@ -3,7 +3,7 @@ const organizerModel = require('../models/Organizer');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
-const secretKey = process.env.SECRET_KEY;
+const secretKey = process.env.secretKey;
 const userController = {
     getOrganizerAnalytics: async (req, res) => {
         try{
