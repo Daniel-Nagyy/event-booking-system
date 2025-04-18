@@ -1,5 +1,6 @@
-const usermodel = require('../models/user');
-const organizerModel = require('../models/Organizer');
+const usermodel = require('../Models/user');
+const eventModel = require("../Models/Event");
+const organizerModel = require('../Models/Organizer');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
@@ -59,7 +60,7 @@ const userController = {
               }
         
               const currentDateTime = new Date();
-              const expiresAt = new Date(+currentDateTime + 1800000); // expire in 3 minutes
+              const expiresAt = new Date(+currentDateTime + 180000); // expire in 3 minutes
               // Generate a JWT token
               const token = jwt.sign(
                 { user: { UserID: user._id, role: user.role } },
@@ -73,8 +74,8 @@ const userController = {
                 .cookie("token", token, {
                   expires: expiresAt,
                   httpOnly: true,
-                  secure: true, // if not working on thunder client , remove it
-                  SameSite: "none",
+                  secure: false,
+                  sameSite: "lax",
                 })
                 .status(200)
                 .json({ message: "login successfully", user });
@@ -136,33 +137,16 @@ catch (error){
     getUserById: async (req, res) => 
         {
         try {
-            const user = await UserModel.findById(req.params.id);
+            const user = await usermodel.findById(req.params.id);
             if (!user) {
                 return res.status(404).json({ message: "User not found" });
             }
             return res.status(200).json(user);
         } catch (error) {
-            return res.status(500).json({ message: 'error', message: error.message });
+            return res.status(500).json({ message: error.message });
         }
     },
-
-
-
-
-    getUserEvents: async(req,res)=>
-        {
-        try {
-            const userID = req.user._id;
-            const events = await eventModel.find({participants: userID})
-            if(events.length ==0)
-            {
-                return res.status(200).json({message: "no events found for the user"});
-            }
-            return res.status(200).json(events);
-        }
-        catch (error){
-            return res.status(500).json({message: "error getting events"});
-        }}, 
+ 
             getUserProfile : async (req, res) => {
                 if (!req.user) {
                     return res.status(404).json({ error: 'User not found' });

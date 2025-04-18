@@ -6,9 +6,9 @@ const bookingController = require("../Controllers/bookingController");
 const router = express.Router();
 const authorizationMiddleware = require("../Middleware/authorizationMiddleware");
 
-router.get("/users/bookings", authorizationMiddleware(['user']), bookingController.getUserBookings);
+router.get("/users/bookings", authorizationMiddleware(['User']), bookingController.getUserBookings);
 
-router.get("/Users",authorizationMiddleware(['admin']),userController.getAllUsers);
+router.get("/Users",authorizationMiddleware(['Admin']),userController.getAllUsers);
 
 router.get("/users", authorizationMiddleware('Admin'), userController.getAllUsers);
 router.put("/users/profile/:id", userController.updateUser);
@@ -17,11 +17,11 @@ router.post("/bookings", authorizationMiddleware('User'), bookingController.crea
 router.delete("/bookings/:id", authorizationMiddleware('User'), bookingController.deleteBooking);
 router.put("/events/:id",authorizationMiddleware(['Admin', 'Organizer']),eventsController.updateEvent);
   module.exports = router;
-router.get('/profile',authorizationMiddleware(['admin ,organizer,user']),userController.getUserProfile);
+router.get('/profile',authorizationMiddleware(['Admin ,Organizer,User']),userController.getUserProfile);
 
-router.put("/Users/profile/:id",authorizationMiddleware(['admin ,organizer,user']),userController.updateUser);
+router.put("/Users/profile/:id",authorizationMiddleware(['Admin ,Organizer,User']),userController.updateUser);
 
-router.delete('/:id', authorizationMiddleware(['admin']),userController.deleteUser);
+router.delete('/:id', authorizationMiddleware(['Admin']),userController.deleteUser);
 
 module.exports = router;
 
