@@ -1,9 +1,9 @@
 const jwt = require("jsonwebtoken");
-const secretKey = process.env.SECRET_KEY;
+const secretKey = process.env.SECRET_KEY
 
 module.exports = function authenticationMiddleware(req, res, next) {
-  const cookie = req.cookies; // if not working then last option req.headers.cookie then extract token
-  console.log("inside auth middleware");
+  const cookie = req.cookies;// if not working then last option req.headers.cookie then extract token
+  console.log('inside auth middleware')
   // console.log(cookie);
 
   if (!cookie) {
@@ -22,7 +22,7 @@ module.exports = function authenticationMiddleware(req, res, next) {
 
     // Attach the decoded user ID to the request object for further use
     //console.log(decoded.user)
-
+    
     req.user = decoded.user;
     next();
   });
