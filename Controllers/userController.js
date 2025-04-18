@@ -48,7 +48,7 @@ const userController = {
               console.log("password: ", user.password);
               // Check if the password is correct
         
-              const passwordMatch = await bycrypt.compare(password, user.password);
+              const passwordMatch = await bcrypt.compare(password, user.password);
               if (!passwordMatch) {
                 return res.status(405).json({ message: "incorect password" });
               }
