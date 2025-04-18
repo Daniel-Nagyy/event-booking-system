@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+const User = require('../models/user.js');
 module.exports= function authorizationMiddleware(roles) {
     return (req, res, next) => {
       console.log('req:',req.user)
@@ -8,3 +10,4 @@ module.exports= function authorizationMiddleware(roles) {
       next();
     };
   }
+

@@ -5,10 +5,9 @@ const cookieParser = require("cookie-parser");
 //Test
 
 const app = express();
-const userRoutes = require("./routes/user");
-const bookingRoutes = require("./routes/booking");
-const eventRoutes = require("./routes/event");
-const authRoutes = require("./routes/auth");
+const userRoutes = require("./Routes/user");
+const eventRoutes = require("./Routes/event");
+const authRoutes = require("./Routes/auth");
 const authrizationMiddleware = require("./Middleware/authorizationMiddleware");
 
 require('dotenv').config();
@@ -28,11 +27,11 @@ app.use(
 //to verify the user token
 app.use("/api/v1", authRoutes);
 //to check if the user is authrized 
-app.use(authrizationMiddleware);
+//app.use(authrizationMiddleware);
 //to get the user booking
 app.use("/api/v1/user", userRoutes);
 //to get the booking
-app.use("/api/v1/booking", bookingRoutes);
+//app.use("/api/v1/booking", bookingRoutes);
 //to get the event
 app.use("/api/v1/event", eventRoutes);
 
@@ -53,4 +52,3 @@ app.use(function (req, res, next) {
   return res.status(404).send("404");
 });
 app.listen(process.env.PORT, () => console.log("server started"));
-
