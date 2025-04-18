@@ -63,19 +63,17 @@ const userController = {
               const expiresAt = new Date(+currentDateTime + 180000); // expire in 3 minutes
               // Generate a JWT token
               const token = jwt.sign(
-                { user: { UserID: user._id, role: user.role } },
+                { user: { id: user._id, role: user.role } }, // changed UserID → id
                 secretKey,
-                {
-                  expiresIn: 3 * 60 * 60,
-                }
+                { expiresIn: 3 * 60 } // or whatever expiration you want
               );
         
               return res
                 .cookie("token", token, {
                   expires: expiresAt,
                   httpOnly: true,
-                  secure: false,
-                  sameSite: "lax",
+                secure: false,
+                sameSite: "lax",
                 })
                 .status(200)
                 .json({ message: "login successfully", user });
@@ -87,7 +85,9 @@ const userController = {
     getAllUsers: async (req,res)=>{
         try {
             const users = await usermodel.find();
+            console.log("success");
             return res.status(200).json(users);
+          
         }
         catch(error)
         {

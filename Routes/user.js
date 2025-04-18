@@ -7,9 +7,7 @@ const authorizationMiddleware = require("../Middleware/authorizationMiddleware")
 
  router.get("/users/bookings", authorizationMiddleware(['User']), bookingController.getUserBookings);
 
-router.get("/Users",authorizationMiddleware(['Admin']),userController.getAllUsers);
-
-router.get("/users", authorizationMiddleware('Admin'), userController.getAllUsers);
+router.get("/users",authorizationMiddleware(['Admin']),userController.getAllUsers);
 router.put("/users/profile/:id", userController.updateUser);
 router.get("/users/:id", authorizationMiddleware('Admin'), userController.getUserById);
 router.post("/bookings", authorizationMiddleware('User'), bookingController.createBooking);
