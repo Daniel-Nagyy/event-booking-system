@@ -120,6 +120,37 @@ const userController = {
 
     getUserEvents: async(req,res)=>
     {
+try {
+    const userID = req.user._id;
+    const events = await eventModel.find({participants: userID})
+    if(events.length ==0)
+    {
+        return res.status(200).json({message: "no events found for the user"});
+    }
+    return res.status(200).json(events);
+}
+catch (error){
+    return res.status(500).json({message: "error getting events"});
+}
+    },
+    getUserById: async (req, res) => 
+        {
+        try {
+            const user = await UserModel.findById(req.params.id);
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            return res.status(200).json(user);
+        } catch (error) {
+            return res.status(500).json({ message: 'error', message: error.message });
+        }
+    }
+}
+
+    module.exports = userController;
+
+
+
         try {
             const userID = req.user._id;
             const events = await eventModel.find({participants: userID})
