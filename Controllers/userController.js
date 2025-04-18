@@ -118,104 +118,102 @@ const userController = {
         }
     },
 
-    getUserEvents: async(req,res)=>
-    {
-try {
-    const userID = req.user._id;
-    const events = await eventModel.find({participants: userID})
-    if(events.length ==0)
-    {
+  getUserEvents: async(req,res)=>
+  {
+    try {
+      const userID = req.user._id;
+      const events = await eventModel.find({participants: userID})
+      if(events.length ==0)
+      {
         return res.status(200).json({message: "no events found for the user"});
+      }
+      return res.status(200).json(events);
     }
-    return res.status(200).json(events);
-}
-catch (error){
-    return res.status(500).json({message: "error getting events"});
-}
-    },
-    getUserById: async (req, res) => 
-        {
-        try {
-            const user = await UserModel.findById(req.params.id);
-            if (!user) {
-                return res.status(404).json({ message: "User not found" });
-            }
-            return res.status(200).json(user);
-        } catch (error) {
-            return res.status(500).json({ message: 'error', message: error.message });
-        }
-    },
+    catch (error){
+      return res.status(500).json({message: "error getting events"});
+    }
+  },
+  getUserById: async (req, res) => 
+  {
+    try {
+      const user = await UserModel.findById(req.params.id);
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+      return res.status(200).json(user);
+    } catch (error) {
+      return res.status(500).json({ message: 'error', message: error.message });
+    }
+  },
 
+  getUserEvents: async(req,res)=>
+  {
+    try {
+      const userID = req.user._id;
+      const events = await eventModel.find({participants: userID})
+      if(events.length ==0)
+      {
+        return res.status(200).json({message: "no events found for the user"});
+      }
+      return res.status(200).json(events);
+    }
+    catch (error){
+      return res.status(500).json({message: "error getting events"});
+    }}, 
 
-
-
-    getUserEvents: async(req,res)=>
-        {
-        try {
-            const userID = req.user._id;
-            const events = await eventModel.find({participants: userID})
-            if(events.length ==0)
-            {
-                return res.status(200).json({message: "no events found for the user"});
-            }
-            return res.status(200).json(events);
-        }
-        catch (error){
-            return res.status(500).json({message: "error getting events"});
-        }}, 
-            getUserProfile : async (req, res) => {
-                if (!req.user) {
-                    return res.status(404).json({ error: 'User not found' });
-                }
-
-                res.json({
-                    id: req.user._id,
-                    name: req.user.name,
-                    email: req.user.email,
-                });
-            },
-                deleteUser : async (req, res) => {
-                    try {
-                            const userId = req.params.id;
-                            await usermodel.findByIdAndDelete(userId); // ← here is where it's failing
-
-                        res.status(200).json({ message: 'User deleted successfully' });
-                    } catch (error) {
-                        console.error(error);
-                        res.status(500).json({ message: 'Server error' });
-                    }
-
-
-
-                },
-    forgotPassword: async (req, res) => {
-  try {
-    const { email, newPassword } = req.body;
-
-    if (!email || !newPassword) {
-      return res.status(400).json({ message: "Email and new password are required." });
+  getUserProfile : async (req, res) => {
+    if (!req.user) {
+      return res.status(404).json({ error: 'User not found' });
     }
 
-    const user = await usermodel.findOne({ email });
+    res.json({
+      id: req.user._id,
+      name: req.user.name,
+      email: req.user.email,
+    });
+  },
+  deleteUser : async (req, res) => {
+    try {
+      const userId = req.params.id;
+      await usermodel.findByIdAndDelete(userId); // ← here is where it's failing
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found." });
+      res.status(200).json({ message: 'User deleted successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error' });
     }
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    user.password = hashedPassword;
 
-    await user.save();
 
-    return res.status(200).json({ message: "Password updated successfully." });
-  } catch (error) {
-    console.error("Forget Password Error:", error);
-    return res.status(500).json({ message: "Internal server error." });
-  }
-    },
+  },
+  forgotPassword: async (req, res) => {
+    try {
+      const { email, newPassword } = req.body;
 
-                
-    
+      if (!email || !newPassword) {
+        return res.status(400).json({ message: "Email and new password are required." });
+      }
+
+      const user = await usermodel.findOne({ email });
+
+      if (!user) {
+        return res.status(404).json({ message: "User not found." });
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+
+      await user.save();
+
+      return res.status(200).json({ message: "Password updated successfully." });
+    } catch (error) {
+      console.error("Forget Password Error:", error);
+      return res.status(500).json({ message: "Internal server error." });
+    }
+  },
+
+
+
 
 }
 

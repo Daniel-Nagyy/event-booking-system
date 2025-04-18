@@ -1,5 +1,5 @@
-const bookingModel = require('../models/Booking');
 const jwt = require("jsonwebtoken");
+const bookingModel = require("../models/Booking");
 require("dotenv").config();
 const secretKey = process.env.SECRET_KEY;
 const bcrypt = require("bcrypt");
