@@ -1,13 +1,13 @@
 const usermodel = require('../models/user');
 const organizerModel = require('../models/Organizer');
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 require("dotenv").config();
 const secretKey = process.env.SECRET_KEY;
-const bcrypt = require("bcrypt");
 const userController = {
     getOrganizerAnalytics: async (req, res) => {
         try{
-            const Organizer = await organizerModel.findById(req.params.id).populate('events');
+            const Organizer = await organizerModel.findById(req.user.id).populate('events');
             return res.status(200).json(Organizer.events);
         }
         catch(error){
@@ -17,14 +17,14 @@ const userController = {
     register:async (req,res) =>{
         try {
             const {UserID,name,email, password,  role}= req.body;
-            const existingUser = await UserModel.findOne({email})
+            const existingUser = await usermodel.findOne({email})
             if(existingUser)
             {
                 return res.status(409).json({message : "user already exists"});
             }
-            const hashPassword = await bycrypt.hash(password,10);
+            const hashPassword = await bcrypt.hash(password,10);
 
-            const newUser = new UserModel({
+            const newUser = new usermodel({
                 UserID,
                 name,
                 email,
@@ -39,14 +39,53 @@ const userController = {
             console.error("error registering user:",error);
             res.status(500).json({message: "error registering user"});
         }
-
-
-
-
-    },
+        },
+        login: async (req, res) => {
+            try {
+              const { email, password } = req.body;
+        
+              // Find the user by email
+              const user = await usermodel.findOne({ email });
+              if (!user) {
+                return res.status(404).json({ message: "email not found" });
+              }
+        
+              console.log("password: ", user.password);
+              // Check if the password is correct
+        
+              const passwordMatch = await bcrypt.compare(password, user.password);
+              if (!passwordMatch) {
+                return res.status(405).json({ message: "incorect password" });
+              }
+        
+              const currentDateTime = new Date();
+              const expiresAt = new Date(+currentDateTime + 1800000); // expire in 3 minutes
+              // Generate a JWT token
+              const token = jwt.sign(
+                { user: { UserID: user._id, role: user.role } },
+                secretKey,
+                {
+                  expiresIn: 3 * 60 * 60,
+                }
+              );
+        
+              return res
+                .cookie("token", token, {
+                  expires: expiresAt,
+                  httpOnly: true,
+                  secure: true, // if not working on thunder client , remove it
+                  SameSite: "none",
+                })
+                .status(200)
+                .json({ message: "login successfully", user });
+            } catch (error) {
+              console.error("Error logging in:", error);
+              res.status(500).json({ message: "Server error" });
+            }
+          },
     getAllUsers: async (req,res)=>{
         try {
-            const users = await UserModel.find();
+            const users = await usermodel.find();
             return res.status(200).json(users);
         }
         catch(error)
@@ -59,7 +98,7 @@ const userController = {
 
     updateUser: async (req,res)=> {
         try {
-            const user = await UserModel.findByIdAndUpdate(
+            const user = await usermodel.findByIdAndUpdate(
                 req.params.UserID,
                 {
                     name: req.body.name,
@@ -146,7 +185,7 @@ const userController = {
 
                 
     
+
 }
 
-                module.exports = userController;
-
+module.exports = userController;

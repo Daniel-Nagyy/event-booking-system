@@ -10,4 +10,5 @@ router.post("/register",userController.register);
 //forget password
 router.put("/forgot-password", userController.forgotPassword);
 
-module.exports = router; 
+module.exports = router;
+

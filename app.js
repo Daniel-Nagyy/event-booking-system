@@ -1,6 +1,5 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const cors = require("cors");
 const cookieParser = require("cookie-parser");
 //Test
 
@@ -9,6 +8,9 @@ const userRoutes = require("./Routes/user");
 const eventRoutes = require("./Routes/event");
 const authRoutes = require("./Routes/auth");
 const authrizationMiddleware = require("./Middleware/authorizationMiddleware");
+const authenticationMiddleware=require('./Middleware/authenticationMiddleware');
+const cors = require("cors");
+
 
 require('dotenv').config();
 
@@ -40,6 +42,8 @@ const db_name = process.env.DB_NAME;
 // const db_url = `mongodb+srv://TestUser:TestPassword@cluster0.lfqod.mongodb.net/${db_name}?retryWrites=true&w=majority`;
 // * Local connection
 const db_url = `${process.env.DB_URL}/${db_name}`; // if it gives error try to change the localhost to 127.0.0.1
+
+
 
 mongoose
   .connect(db_url)
