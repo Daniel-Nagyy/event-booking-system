@@ -1,14 +1,16 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
-//Test
+
 
 const app = express();
 const userRoutes = require("./Routes/user");
 const eventRoutes = require("./Routes/event");
 const authRoutes = require("./Routes/auth");
-const authrizationMiddleware = require("./Middleware/authorizationMiddleware");
+const bookingRoutes= require("./Routes/booking");
 const authenticationMiddleware=require('./Middleware/authenticationMiddleware');
+const authrizationMiddleware = require("./Middleware/authorizationMiddleware");
+
 const cors = require("cors");
 
 
@@ -26,21 +28,20 @@ app.use(
     credentials: true,
   })
 );
-//to verify the user token
+
 app.use("/api/v1", authRoutes);
+
 //to check if the user is authrized 
 app.use(authenticationMiddleware);
+
 //to get the user booking
-app.use("/api/v1/user", userRoutes);
-//to get the booking
-//app.use("/api/v1/booking", bookingRoutes);
-//to get the event
-app.use("/api/v1/event", eventRoutes);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/bookings", bookingRoutes);
+
+app.use("/api/v1/events", eventRoutes);
 
 const db_name = process.env.DB_NAME;
-// * Cloud Connection
-// const db_url = `mongodb+srv://TestUser:TestPassword@cluster0.lfqod.mongodb.net/${db_name}?retryWrites=true&w=majority`;
-// * Local connection
+
 const db_url = `${process.env.DB_URL}/${db_name}`; // if it gives error try to change the localhost to 127.0.0.1
 
 
