@@ -13,7 +13,7 @@ const eventController = {
       category, date, time, totalTickets
     } = req.body;
 
-    const organizerId = req.user.id;
+    const organizerId = req.user._id;
     const event = new eventModel({
       EventID,
       title,

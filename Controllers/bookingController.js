@@ -21,7 +21,7 @@ const bookingController = {
   
   createBooking: async (req, res) => {
     try {
-      const userId = req.user.id; // Use authenticated user ID
+      const userId = req.user._id; // Use authenticated user ID
       const { eventId, bookingDate } = req.body;
   
       const existingBooking = await bookingModel.findOne({ eventId, userId });

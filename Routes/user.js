@@ -15,6 +15,7 @@ router.post("/bookings", authorizationMiddleware('User'), bookingController.crea
 router.delete("/bookings/:id", authorizationMiddleware('User'), bookingController.deleteBooking);
 router.put("/events/:id",authorizationMiddleware(['Admin', 'Organizer']),eventsController.updateEvent);
 router.get('/profile',userController.getUserProfile);
+router.get('/events',userController.getUserEvents);
 
 router.put("/Users/profile/:id",authorizationMiddleware(['Admin ,Organizer,User']),userController.updateUser);
 
