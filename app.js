@@ -7,6 +7,7 @@ const app = express();
 const userRoutes = require("./Routes/user");
 const eventRoutes = require("./Routes/event");
 const authRoutes = require("./Routes/auth");
+const bookingRoutes= require("./Routes/booking");
 const authenticationMiddleware=require('./Middleware/authenticationMiddleware');
 const authrizationMiddleware = require("./Middleware/authorizationMiddleware");
 
@@ -33,6 +34,7 @@ app.use("/api/v1", authRoutes);
 app.use(authenticationMiddleware);
 
 app.use("/api/v1/user", userRoutes);
+app.use("/api/v1/", bookingRoutes);
 
 app.use("/api/v1/", eventRoutes);
 
