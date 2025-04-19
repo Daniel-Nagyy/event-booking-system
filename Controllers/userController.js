@@ -157,10 +157,7 @@ getUserProfile: async (req, res) => {
         }
 
         res.json({
-          name: user.name,
-          email:user.email,
-          role:user.role,
-          profilePicture:user.profilePicture
+          user
         });
     } catch (error) {
         console.error("Error in getUserProfile:", error);

@@ -10,7 +10,7 @@ const authenticationMiddleware=require("../Middleware/authenticationMiddleware")
 
 router.get("/users",authenticationMiddleware,authorizationMiddleware('Admin'),userController.getAllUsers);
 router.put("/users/profile/:id",authenticationMiddleware, userController.updateUser);
-router.get("/users/:id", authorizationMiddleware('Admin'), userController.getUserById);
+router.get("/:id", authorizationMiddleware('Admin'), userController.getUserById);
 
 
 router.put("/events/:id",authorizationMiddleware(['Admin', 'Organizer']),eventsController.updateEvent);
