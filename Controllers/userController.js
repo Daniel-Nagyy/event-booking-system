@@ -62,9 +62,9 @@ const userController = {
               const expiresAt = new Date(+currentDateTime + 180000); // expire in 3 minutes
               // Generate a JWT token
               const token = jwt.sign(
-                { user: { id: user._id, role: user.role } }, // changed UserID → id
+                { user: { _id: user._id, role: user.role } },
                 secretKey,
-                { expiresIn: 3 * 60 } // or whatever expiration you want
+                { expiresIn: 3 * 600 } // or whatever expiration you want
               );
         
               return res
@@ -146,17 +146,27 @@ catch (error){
         }
     },
  
-            getUserProfile : async (req, res) => {
-                if (!req.user) {
-                    return res.status(404).json({ error: 'User not found' });
-                }
+       
+getUserProfile: async (req, res) => {
+    try {
+        const userId = req.user._id; // from the JWT token
 
-                res.json({
-                    id: req.user._id,
-                    name: req.user.name,
-                    email: req.user.email,
-                });
-            },
+        const user = await usermodel.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        res.json({
+          name: user.name,
+          email:user.email,
+          role:user.role,
+          profilePicture:user.profilePicture
+        });
+    } catch (error) {
+        console.error("Error in getUserProfile:", error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+},
                 deleteUser : async (req, res) => {
                     try {
                             const userId = req.params.id;
