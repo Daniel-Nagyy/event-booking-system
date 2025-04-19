@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 
 
+const User = require("./Models/user");
 const app = express();
 const userRoutes = require("./Routes/user");
 const eventRoutes = require("./Routes/event");
@@ -46,6 +47,9 @@ const db_url = `${process.env.DB_URL}/${db_name}`; // if it gives error try to c
 
 
 
+// Middleware to parse JSON body
+app.use(express.json());
+
 mongoose
   .connect(db_url)
   .then(() => console.log("MongoDB connected"))
@@ -57,3 +61,4 @@ app.use(function (req, res, next) {
   return res.status(404).send("404");
 });
 app.listen(process.env.PORT, () => console.log("server started"));
+
