@@ -1,4 +1,4 @@
-const bookingModel = require("../models/Booking");
+const bookingModel = require("../Models/Booking");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const secretKey = process.env.secretKey;

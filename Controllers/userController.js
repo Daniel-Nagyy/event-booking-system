@@ -1,6 +1,6 @@
-const userModel = require('../models/user');
-const eventModel = require("../models/Event");
-const organizerModel = require('../models/Organizer');
+const userModel = require('../Models/user');
+const eventModel = require("../Models/Event");
+const organizerModel = require('../Models/Organizer');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
