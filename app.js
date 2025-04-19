@@ -31,7 +31,6 @@ app.use(
 app.use("/api/v1", authRoutes);
 
 app.use(authenticationMiddleware);
-app.use(authrizationMiddleware);
 
 app.use("/api/v1/user", userRoutes);
 

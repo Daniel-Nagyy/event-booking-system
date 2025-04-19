@@ -17,7 +17,7 @@ const userController = {
     },
     register:async (req,res) =>{
         try {
-            const {UserID,name,email, password,  role}= req.body;
+            const {name,email, password,  role}= req.body;
             const existingUser = await usermodel.findOne({email})
             if(existingUser)
             {
@@ -26,7 +26,6 @@ const userController = {
             const hashPassword = await bcrypt.hash(password,10);
 
             const newUser = new usermodel({
-                UserID,
                 name,
                 email,
                 password:hashPassword,
@@ -100,7 +99,7 @@ const userController = {
     updateUser: async (req,res)=> {
         try {
             const user = await usermodel.findByIdAndUpdate(
-                req.params.UserID,
+                req.params.id,
                 {
                     name: req.body.name,
                     email: req.body.email,
