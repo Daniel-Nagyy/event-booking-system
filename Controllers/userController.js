@@ -44,7 +44,6 @@ const userController = {
     try {
       const { email, password } = req.body;
 
-<<<<<<< HEAD
       // Find the user by email
       const user = await userModel.findOne({ email });
       if (!user) {
@@ -77,11 +76,6 @@ const userController = {
         })
         .status(200)
         .json({ message: "login successfully", user });
-=======
-        res.json({
-          user
-        });
->>>>>>> origin/Daniel-Branch
     } catch (error) {
       console.error("Error logging in:", error);
       res.status(500).json({ message: "Server error" });
@@ -179,10 +173,7 @@ const userController = {
       }
 
       res.json({
-        name: user.name,
-        email:user.email,
-        role:user.role,
-        profilePicture:user.profilePicture
+       user
       });
     } catch (error) {
       console.error("Error in getUserProfile:", error);
