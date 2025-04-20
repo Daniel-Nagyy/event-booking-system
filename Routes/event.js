@@ -8,7 +8,7 @@ const authorizationMiddleware = require("../Middleware/authorizationMiddleware")
 router.delete('/:id', authorizationMiddleware(['Organizer','Admin']), eventController.deleteEvent);
 //delete an event 
 // GET /api/v1/events/:id - Get details of a single event (public)
-router.put("/:id",authorizationMiddleware(['Admin', 'Organizer']),eventController.updateEvent);
+router.put('/:id',authorizationMiddleware(['Admin', 'Organizer']),eventController.updateEvent);
 router.get('/:id',eventController.getEventDetails);
 
 

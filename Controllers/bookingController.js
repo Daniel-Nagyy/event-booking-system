@@ -1,12 +1,8 @@
 const bookingModel = require("../Models/Booking");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-<<<<<<< HEAD
-const secretKey = process.env.secretKey;
-=======
 const mongoose = require("mongoose");
 const secretKey = process.env.SECRET_KEY;
->>>>>>> origin/Daniel-Branch
 const bcrypt = require("bcrypt");
 const bookingController = {
   getUserBookings: async (req, res) => {
@@ -27,7 +23,7 @@ const bookingController = {
   createBooking: async (req, res) => {
     try {
       const userId = req.user._id;
-      const { BookingID, event, bookingDate, totalPrice, ticketsBooked } = req.body;
+      const { event, bookingDate, totalPrice, ticketsBooked } = req.body;
   
       const existingBooking = await bookingModel.findOne({ event, user: userId });
       if (existingBooking) {
@@ -35,7 +31,6 @@ const bookingController = {
       }
   
       const newBooking = new bookingModel({
-        BookingID,
         event,
         user: userId,
         bookingDate,
