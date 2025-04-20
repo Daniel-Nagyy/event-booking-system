@@ -1,12 +1,17 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+<<<<<<< HEAD
 const UserSchema = new Schema({
     UserID: {
         type: Number,
         required: true,
         unique: true
     },
+=======
+const UserSchema = new Schema(
+  {
+>>>>>>> origin/Daniel-Branch
     name: {
         type: String,
         required: true,

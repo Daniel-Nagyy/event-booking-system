@@ -1,13 +1,18 @@
 const bookingModel = require("../Models/Booking");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+<<<<<<< HEAD
 const secretKey = process.env.secretKey;
+=======
+const mongoose = require("mongoose");
+const secretKey = process.env.SECRET_KEY;
+>>>>>>> origin/Daniel-Branch
 const bcrypt = require("bcrypt");
 const bookingController = {
   getUserBookings: async (req, res) => {
     console.log("Fetching user bookings");
     try{
-      const userId = req.user.id;
+      const userId = req.user._id;
       const bookings = await bookingModel.find({ userId: userId }).populate('event');
       if (!bookings || bookings.length === 0) {
         return res.status(404).json({ message: 'No bookings found for this user' });
@@ -21,21 +26,25 @@ const bookingController = {
   
   createBooking: async (req, res) => {
     try {
-      const userId = req.user._id; // Use authenticated user ID
-      const { eventId, bookingDate } = req.body;
+      const userId = req.user._id;
+      const { BookingID, event, bookingDate, totalPrice, ticketsBooked } = req.body;
   
-      const existingBooking = await bookingModel.findOne({ eventId, userId });
+      const existingBooking = await bookingModel.findOne({ event, user: userId });
       if (existingBooking) {
         return res.status(409).json({ message: "Booking already exists" });
       }
   
       const newBooking = new bookingModel({
-        eventId,
-        userId,
+        BookingID,
+        event,
+        user: userId,
         bookingDate,
+        totalPrice,
+        ticketsBooked
       });
   
       await newBooking.save();
+  
       res.status(201).json({ message: "Booking created successfully", booking: newBooking });
     } catch (error) {
       console.error("Error creating booking:", error);
@@ -43,18 +52,31 @@ const bookingController = {
     }
   },
 deleteBooking: async (req, res) => {
-    try {
-        const bookingId = req.params.id;
-        const deletedBooking = await bookingModel.findByIdAndDelete(bookingId);
-        if (!deletedBooking) {
-            return res.status(404).json({message:"Booking not found" }); }
-        res.status(200).json({message:"Booking deleted successfully" });
-    } catch (error) {
-        console.error("Error deleting booking:", error);
-        res.status(500).json({ message: "Error deleting booking" });
+  try {
+    const bookingId = req.params.id;
+    let deletedBooking;
+
+    if (mongoose.Types.ObjectId.isValid(bookingId)) {
+      deletedBooking = await bookingModel.findByIdAndDelete(bookingId);
     }
+
+    if (!deletedBooking && !isNaN(bookingId)) {
+      deletedBooking = await bookingModel.findOneAndDelete({ BookingID: Number(bookingId) });
+    }
+
+    if (!deletedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.status(200).json({ message: "Booking deleted successfully" });
+
+  } catch (error) {
+    console.error("Error deleting booking:", error);
+    res.status(500).json({ message: "Error deleting booking" });
+  }
 }
 };
+
 
 module.exports = bookingController;
 
