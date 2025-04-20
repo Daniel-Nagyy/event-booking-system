@@ -34,9 +34,9 @@ app.use("/api/v1", authRoutes);
 app.use(authenticationMiddleware);
 
 app.use("/api/v1/user", userRoutes);
-app.use("/api/v1/", bookingRoutes);
+app.use("/api/v1/booking", bookingRoutes);
 
-app.use("/api/v1/", eventRoutes);
+app.use("/api/v1/event", eventRoutes);
 
 const db_name = process.env.DB_NAME;
 

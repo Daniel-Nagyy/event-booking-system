@@ -51,7 +51,7 @@ const eventController = {
 
   getEventDetails: async (req, res) => {
     try {
-      const eventId = req.params.id;
+      const eventId = req.params._id;
       const event = await eventModel.findById(eventId);
 
       if (!event) {

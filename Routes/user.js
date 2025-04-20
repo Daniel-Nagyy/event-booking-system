@@ -12,12 +12,9 @@ router.get("/users",authenticationMiddleware,authorizationMiddleware('Admin'),us
 router.put("/users/profile/:id",authenticationMiddleware, userController.updateUser);
 router.get("/:id", authorizationMiddleware('Admin'), userController.getUserById);
 
-
-router.put("/events/:id",authorizationMiddleware(['Admin', 'Organizer']),eventsController.updateEvent);
-router.get('/profile',userController.getUserProfile);
 router.get('/events',userController.getUserEvents);
- router.get("/bookings", authorizationMiddleware(['User']), bookingController.getUserBookings);
 
+router.get('/profile',userController.getUserProfile);
 router.put("/Users/profile/:id",authorizationMiddleware(['Admin ,Organizer,User']),userController.updateUser);
 
 router.delete('/:id', authorizationMiddleware(['Admin']),userController.deleteUser);
