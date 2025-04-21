@@ -12,5 +12,5 @@ router.put('/:id',authorizationMiddleware(['Admin', 'Organizer']),eventControlle
 router.get('/:id',eventController.getEventDetails);
 
 
-router.post('/', authorizationMiddleware(['Admin']), eventController.createEvent);
+router.post('/', authorizationMiddleware(['Organizer']), eventController.createEvent);
 module.exports = router;

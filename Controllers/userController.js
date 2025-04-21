@@ -6,15 +6,6 @@ const bcrypt = require("bcrypt");
 require("dotenv").config();
 const secretKey = process.env.secretKey;
 const userController = {
-  getOrganizerAnalytics: async (req, res) => {
-    try{
-      const Organizer = await organizerModel.findById(req.user.id).populate('events');
-      return res.status(200).json(Organizer.events);
-    }
-    catch(error){
-      return res.status(500).json({ message: 'Internal server error' });
-    }
-  },
   register:async (req,res) =>{
     try {
       const {name,email, password,  role}= req.body;

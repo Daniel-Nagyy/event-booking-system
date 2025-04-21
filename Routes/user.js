@@ -8,14 +8,18 @@ const authenticationMiddleware=require("../Middleware/authenticationMiddleware")
 
 
 
-router.get("/users",authenticationMiddleware,authorizationMiddleware('Admin'),userController.getAllUsers);
-router.put("/users/profile/:id",authenticationMiddleware, userController.updateUser);
+router.get("/",authorizationMiddleware('Admin'),userController.getAllUsers);
 router.get("/:id", authorizationMiddleware('Admin'), userController.getUserById);
+router.delete("/:id", authorizationMiddleware('Admin'), userController.deleteUser);
 
-router.get('/events',userController.getUserEvents);
+router.get("/bookings",bookingController.getUserBookings);
+
+router.get('/events',authorizationMiddleware('Organizer'),userController.getUserEvents);
+router.get('/events/analytics',authorizationMiddleware('Admin'),eventsController.getEventAnalysis);
 
 router.get('/profile',userController.getUserProfile);
-router.put("/Users/profile/:id",authorizationMiddleware(['Admin ,Organizer,User']),userController.updateUser);
+
+router.put('/profile',userController.updateUser);
 
 
 module.exports = router;

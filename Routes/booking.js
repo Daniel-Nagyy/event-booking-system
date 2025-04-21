@@ -5,14 +5,9 @@
  const authorizationMiddleware = require("../Middleware/authorizationMiddleware");
  const authenticationMiddleware=require("../Middleware/authenticationMiddleware")
  
-<<<<<<< HEAD
- router.post("/bookings", authorizationMiddleware('User'), bookingController.createBooking);
- router.delete("/bookings/:id", authorizationMiddleware('User'), bookingController.deleteBooking);
-=======
  router.delete("/:id", authorizationMiddleware('User'), bookingController.deleteBooking);
  router.get("/:id", bookingController.getUserBookings);
- router.post("/", authorizationMiddleware('User'), bookingController.createBooking);
->>>>>>> origin/Daniel-Branch
+ router.post("/",bookingController.createBooking);
 
  
 module.exports = router;
