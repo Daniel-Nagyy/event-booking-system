@@ -5,6 +5,30 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const secretKey = process.env.secretKey;
+const nodemailer = require("nodemailer");
+
+const otpStore = new Map(); // Store: email -> { otp, hashedPassword, expiresAt }
+
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+const sendOTPEmail = async (email, otp) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "noorjjj2006@gmail.com",       // Replace with real Gmail
+      pass: "crfj epkw eblp rata",          // Replace with Gmail App Password
+    },
+  });
+
+  const mailOptions = {
+    from: "noorjjj2006@gmail.com",
+    to: email,
+    subject: "Password Reset OTP",
+    text: `Your OTP is: ${otp}. It will expire in 5 minutes.`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
 const userController = {
   register:async (req,res) =>{
     try {
@@ -190,26 +214,51 @@ const userController = {
 
   forgotPassword: async (req, res) => {
     try {
-      const { email, newPassword } = req.body;
+      const { email, newPassword, otp } = req.body;
 
-      if (!email || !newPassword) {
-        return res.status(400).json({ message: "Email and new password are required." });
+      if (!email) {
+        return res.status(400).json({ message: "Email is required." });
       }
 
       const user = await userModel.findOne({ email });
-
       if (!user) {
         return res.status(404).json({ message: "User not found." });
       }
 
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      user.password = hashedPassword;
+      // Step 1: No OTP yet → generate + send it
+      if (!otp && newPassword) {
+        const code = generateOTP();
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const expiresAt = Date.now() + 5 * 60 * 1000;
 
+        otpStore.set(email, { otp: code, hashedPassword, expiresAt });
+
+        await sendOTPEmail(email, code);
+        return res.status(200).json({ message: "OTP sent to email." });
+      }
+
+      // Step 2: OTP is provided → verify and update password
+      const record = otpStore.get(email);
+      if (!record) {
+        return res.status(400).json({ message: "No OTP request found." });
+      }
+
+      if (Date.now() > record.expiresAt) {
+        otpStore.delete(email);
+        return res.status(400).json({ message: "OTP expired." });
+      }
+
+      if (otp !== record.otp) {
+        return res.status(400).json({ message: "Invalid OTP." });
+      }
+
+      user.password = record.hashedPassword;
       await user.save();
+      otpStore.delete(email);
 
-      return res.status(200).json({ message: "Password updated successfully." });
+      return res.status(200).json({ message: "Password successfully reset." });
     } catch (error) {
-      console.error("Forget Password Error:", error);
+      console.error("Forgot Password Error:", error);
       return res.status(500).json({ message: "Internal server error." });
     }
   },
