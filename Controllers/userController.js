@@ -5,7 +5,31 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const secretKey = process.env.secretKey;
+//for forgot password
 const nodemailer = require("nodemailer");
+
+const otpStore = new Map(); // Store: email -> { otp, hashedPassword, expiresAt }
+
+const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+
+const sendOTPEmail = async (email, otp) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "noorjjj2006@gmail.com",       // Replace with real Gmail
+      pass: "crfj epkw eblp rata",          // Replace with Gmail App Password
+    },
+  });
+
+  const mailOptions = {
+    from: "noorjjj2006@gmail.com",
+    to: email,
+    subject: "Password Reset OTP",
+    text: `Your OTP is: ${otp}. It will expire in 5 minutes.`,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
 const userController = {
   register:async (req,res) =>{
     try {
@@ -187,65 +211,56 @@ const userController = {
 
   },
 
-
-
-
   forgotPassword: async (req, res) => {
     try {
-      const { email, newPassword } = req.body;
+      const { email, newPassword, otp } = req.body;
 
-      if (!email || !newPassword) {
-        return res.status(400).json({ message: "Email and new password are required." });
+      if (!email) {
+        return res.status(400).json({ message: "Email is required." });
       }
 
       const user = await userModel.findOne({ email });
-
       if (!user) {
         return res.status(404).json({ message: "User not found." });
       }
 
-      const hashedPassword = await bcrypt.hash(newPassword, 10);
-      user.password = hashedPassword;
+      // Step 1: No OTP yet → generate + send it
+      if (!otp && newPassword) {
+        const code = generateOTP();
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+        const expiresAt = Date.now() + 5 * 60 * 1000;
 
-      // Send confirmation email
-      const transporter = nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-          user: "noorjjj2006@gmail.com", // Replace with real project email
-          pass: "crfj epkw eblp rata", // Replace with actual password or use environment variable
-        },
-      });
+        otpStore.set(email, { otp: code, hashedPassword, expiresAt });
 
-      const mailOptions = {
-        from: "noorjjj2006",
-        to: email,
-        subject: "Password Reset Confirmation",
-        text: `Your password has been successfully reset.`,
-      };
+        await sendOTPEmail(email, code);
+        return res.status(200).json({ message: "OTP sent to email." });
+      }
 
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.error("Error sending email:", error);
-          return reject(error);
-        } else {
-          console.log("Email sent:", info.response);
-          resolve();
-        }
-      });
+      // Step 2: OTP is provided → verify and update password
+      const record = otpStore.get(email);
+      if (!record) {
+        return res.status(400).json({ message: "No OTP request found." });
+      }
 
-      // Wait for 1 minute before proceeding
-      await new Promise(resolve => setTimeout(resolve, 60000));  // 60000ms = 1 minute
-      console.log("1 minute delay completed.");
+      if (Date.now() > record.expiresAt) {
+        otpStore.delete(email);
+        return res.status(400).json({ message: "OTP expired." });
+      }
+
+      if (otp !== record.otp) {
+        return res.status(400).json({ message: "Invalid OTP." });
+      }
+
+      user.password = record.hashedPassword;
       await user.save();
+      otpStore.delete(email);
 
-      return res.status(200).json({ message: "Password updated and email sent. Please check your email for confirmation." });
+      return res.status(200).json({ message: "Password successfully reset." });
     } catch (error) {
       console.error("Forgot Password Error:", error);
       return res.status(500).json({ message: "Internal server error." });
     }
   },
-
-
 
   updateRole: async (req, res)=>{
     try
@@ -253,8 +268,8 @@ const userController = {
         const newRole = req.newRole
 
         if(!newRole) return res.status(400).message("Empty role")
-
-        const user = await UserModel.findByIdAndUpdate(req.params.id,
+        //changed UserModel to userModel
+        const user = await userModel.findByIdAndUpdate(req.params.id,
 
             {
                 role: req.body.role
@@ -266,9 +281,10 @@ const userController = {
         return res.status(200).message("Role Updated Successfully")
         
     }
+  
     catch(err)
     {
-        return res.status(500).json({message: error.message});
+        return res.status(500).json({message: err.message});
     }
 }
 
