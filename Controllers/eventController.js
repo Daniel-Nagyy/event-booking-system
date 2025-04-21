@@ -1,4 +1,5 @@
 const eventModel = require('../Models/Event');
+const bookingModel = require('../Models/Booking');
 require("dotenv").config();
 const secretKey = process.env.SECRET_KEY;
 const jwt = require("jsonwebtoken");
@@ -135,7 +136,77 @@ const eventController = {
       console.error("Error updating event:", error);
       res.status(500).json({ message: "Error updating event", error: error.message });
     }
+  },
+
+   getUserConfirmedBookings : async (req, res) => {
+    try {
+      const userId = req.user._id;
+  
+      const confirmedBookings = await bookingModel.find({
+        user: userId,
+        bookingStatus: "Confirmed"
+      }).populate("event"); // populate event details
+  
+      const events = confirmedBookings.map(booking => booking.event);
+  
+      res.status(200).json({ events });
+    } 
+    catch (error) {
+      console.error("Error fetching confirmed bookings:", error);
+      res.status(500).json({ message: "Error fetching confirmed bookings" });
+    }
+},
+approveEvent: async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    const event = await eventModel.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    if (event.status === "approved") {
+      return res.status(400).json({ message: "Event is already approved" });
+    }
+
+    event.status = "approved";
+    await event.save();
+
+    res.status(200).json({ message: "Event approved successfully", event });
+  } catch (error) {
+    console.error("Error approving event:", error);
+    res.status(500).json({ message: "Error approving event" });
   }
-};
+},
+getApprovedEvents: async (req, res) => {
+  try {
+    const approvedEvents = await eventModel.find({ status: "approved" });
+
+    if (!approvedEvents || approvedEvents.length === 0) {
+      return res.status(404).json({ message: "No approved events found" });
+    }
+
+    res.status(200).json(approvedEvents);
+  } catch (error) {
+    console.error("Error fetching approved events:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+},
+
+getAllEvents: async (req, res) => {
+  try {
+    const events = await eventModel.find();
+
+    if (!events || events.length === 0) {
+      return res.status(404).json({ message: "No events found" });
+    }
+
+    res.status(200).json(events);
+  } catch (error) {
+    console.error("Error fetching all events:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+},
+}
 
 module.exports = eventController;

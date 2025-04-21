@@ -58,6 +58,11 @@ const eventSchema = new Schema({
   image: {
     type: String,
     default: "default.jpg",
+  },
+  status: {
+    type: String,
+    enum: ["Pending", "approved", "Cancelled"],
+    default: "Pending",
   }
 }, { timestamps: true });
 
