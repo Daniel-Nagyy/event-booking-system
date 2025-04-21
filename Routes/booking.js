@@ -6,7 +6,7 @@
  const authenticationMiddleware=require("../Middleware/authenticationMiddleware")
  
  router.delete("/:id", authorizationMiddleware('User'), bookingController.deleteBooking);
- router.get("/:id", bookingController.getUserBookings);
+ router.get("/:id", bookingController.getBookingbyid);
  router.post("/",bookingController.createBooking);
 
  

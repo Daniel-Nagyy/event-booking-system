@@ -212,9 +212,32 @@ const userController = {
       console.error("Forget Password Error:", error);
       return res.status(500).json({ message: "Internal server error." });
     }
-  }
+  },
 
+  updateRole: async (req, res)=>{
+    try
+    {
+        const newRole = req.newRole
 
+        if(!newRole) return res.status(400).message("Empty role")
+
+        const user = await UserModel.findByIdAndUpdate(req.params.id,
+
+            {
+                role: req.body.role
+            },
+            {
+                new: true, 
+            }
+        );
+        return res.status(200).message("Role Updated Successfully")
+        
+    }
+    catch(err)
+    {
+        return res.status(500).json({message: error.message});
+    }
+}
 
 
 }
