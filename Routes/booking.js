@@ -8,6 +8,8 @@
  router.delete("/:id", authorizationMiddleware('User'), bookingController.deleteBooking);
  router.get("/:id", bookingController.getBookingbyid);
  router.post("/",bookingController.createBooking);
+router.patch("/approvebooking/:bookingId",authorizationMiddleware(['Admin', 'Organizer']),bookingController.approveBooking);
+
 
  
 module.exports = router;

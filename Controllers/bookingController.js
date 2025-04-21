@@ -107,6 +107,31 @@ getBookingbyid:async(req,res)=>{
   catch(err){
       return res.stasus(500).message("Server Error")
   }
+},
+ approveBooking : async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+
+    // Find the booking by ID
+    const booking = await bookingModel.findById(bookingId);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    if (booking.bookingStatus === "Confirmed") {
+      return res.status(400).json({ message: "Booking is already confirmed" });
+    }
+
+    // Update status to Confirmed
+    booking.bookingStatus = "Confirmed";
+    await booking.save();
+
+    res.status(200).json({ message: "Booking confirmed successfully", booking });
+  } catch (error) {
+    console.error("Error approving booking:", error);
+    res.status(500).json({ message: "Error confirming booking" });
+  }
 }
 };
 
