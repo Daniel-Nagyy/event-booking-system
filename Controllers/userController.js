@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const secretKey = process.env.secretKey;
+const nodemailer = require("nodemailer");
 const userController = {
   register:async (req,res) =>{
     try {
@@ -188,6 +189,7 @@ const userController = {
 
 
 
+
   forgotPassword: async (req, res) => {
     try {
       const { email, newPassword } = req.body;
@@ -205,14 +207,45 @@ const userController = {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
       user.password = hashedPassword;
 
+      // Send confirmation email
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: "noorjjj2006@gmail.com", // Replace with real project email
+          pass: "crfj epkw eblp rata", // Replace with actual password or use environment variable
+        },
+      });
+
+      const mailOptions = {
+        from: "noorjjj2006",
+        to: email,
+        subject: "Password Reset Confirmation",
+        text: `Your password has been successfully reset.`,
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error("Error sending email:", error);
+          return reject(error);
+        } else {
+          console.log("Email sent:", info.response);
+          resolve();
+        }
+      });
+
+      // Wait for 1 minute before proceeding
+      await new Promise(resolve => setTimeout(resolve, 60000));  // 60000ms = 1 minute
+      console.log("1 minute delay completed.");
       await user.save();
 
-      return res.status(200).json({ message: "Password updated successfully." });
+      return res.status(200).json({ message: "Password updated and email sent. Please check your email for confirmation." });
     } catch (error) {
-      console.error("Forget Password Error:", error);
+      console.error("Forgot Password Error:", error);
       return res.status(500).json({ message: "Internal server error." });
     }
   },
+
+
 
   updateRole: async (req, res)=>{
     try
