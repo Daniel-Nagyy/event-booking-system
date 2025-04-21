@@ -1,14 +1,16 @@
-const bookingModel = require("../models/Booking");
+const bookingModel = require("../Models/Booking");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const secretKey = process.env.secretKey;
+const mongoose = require("mongoose");
+const secretKey = process.env.SECRET_KEY;
+const eventModel = require('../Models/Event');
 const bcrypt = require("bcrypt");
 const bookingController = {
   getUserBookings: async (req, res) => {
     console.log("Fetching user bookings");
     try{
-      const userId = req.user.id;
-      const bookings = await bookingModel.find({ userId: userId }).populate('event');
+      const userId = req.user._id;
+      const bookings = await bookingModel.find({ user: userId }).populate('event');
       if (!bookings || bookings.length === 0) {
         return res.status(404).json({ message: 'No bookings found for this user' });
       }
@@ -21,40 +23,93 @@ const bookingController = {
   
   createBooking: async (req, res) => {
     try {
-      const userId = req.user._id; // Use authenticated user ID
-      const { eventId, bookingDate } = req.body;
+      const userId = req.user._id;
+      const { event, bookingDate, totalPrice, ticketsBooked } = req.body;
   
-      const existingBooking = await bookingModel.findOne({ eventId, userId });
+      // Check if event exists
+      const eventData = await eventModel.findById(event);
+      if (!eventData) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+  
+      // Check if enough tickets are available
+      if (ticketsBooked > eventData.remainingTickets) {
+        return res.status(400).json({
+          message: `Only ${eventData.remainingTickets} tickets remaining. Cannot book ${ticketsBooked}.`
+        });
+      }
+  
+      // Check if user has already booked the event
+      const existingBooking = await bookingModel.findOne({ event, user: userId });
       if (existingBooking) {
         return res.status(409).json({ message: "Booking already exists" });
       }
   
+      // Create the new booking
       const newBooking = new bookingModel({
-        eventId,
-        userId,
+        event,
+        user: userId,
         bookingDate,
+        totalPrice,
+        ticketsBooked
       });
   
       await newBooking.save();
-      res.status(201).json({ message: "Booking created successfully", booking: newBooking });
+  
+      // Update remaining tickets in the event
+      eventData.remainingTickets -= ticketsBooked;
+      await eventData.save();
+  
+      res.status(201).json({
+        message: "Booking created successfully",
+        booking: newBooking
+      });
+  
     } catch (error) {
       console.error("Error creating booking:", error);
       res.status(500).json({ message: "Error creating booking" });
     }
   },
+  
 deleteBooking: async (req, res) => {
-    try {
-        const bookingId = req.params.id;
-        const deletedBooking = await bookingModel.findByIdAndDelete(bookingId);
-        if (!deletedBooking) {
-            return res.status(404).json({message:"Booking not found" }); }
-        res.status(200).json({message:"Booking deleted successfully" });
-    } catch (error) {
-        console.error("Error deleting booking:", error);
-        res.status(500).json({ message: "Error deleting booking" });
+  try {
+    const bookingId = req.params.id;
+    let deletedBooking;
+
+    if (mongoose.Types.ObjectId.isValid(bookingId)) {
+      deletedBooking = await bookingModel.findByIdAndDelete(bookingId);
     }
+
+    if (!deletedBooking && !isNaN(bookingId)) {
+      deletedBooking = await bookingModel.findOneAndDelete({ BookingID: Number(bookingId) });
+    }
+
+    if (!deletedBooking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    res.status(200).json({ message: "Booking deleted successfully" });
+
+  } catch (error) {
+    console.error("Error deleting booking:", error);
+    res.status(500).json({ message: "Error deleting booking" });
+  }
+},
+getBookingbyid:async(req,res)=>{
+  try{
+      const bookingID = req.params.bookingID
+      if(!bookingID) return res.status(400).message("null ID");
+
+      booking = await bookingModel.findById(req.params.bookingID)
+      if(!booking) return res.status(404).message("booking not found")
+      return res.stasus(200).json(booking);
+  }
+  catch(err){
+      return res.stasus(500).message("Server Error")
+  }
 }
 };
+
 
 module.exports = bookingController;
 

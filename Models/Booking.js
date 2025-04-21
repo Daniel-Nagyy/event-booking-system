@@ -4,11 +4,6 @@ const Event = require("./Event");
 const User = require("./user");
 
 const bookingSchema = new Schema({
-  BookingID: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
   event: {
     type: Schema.Types.ObjectId,
     ref: "Event",

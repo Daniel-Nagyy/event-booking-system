@@ -1,4 +1,4 @@
-const eventModel = require('../models/Event');
+const eventModel = require('../Models/Event');
 require("dotenv").config();
 const secretKey = process.env.SECRET_KEY;
 const jwt = require("jsonwebtoken");
@@ -10,24 +10,31 @@ require("dotenv").config();
 const eventController = {
   createEvent: async (req, res) => {
     const {
-      EventID, title, description, location,
+      title, description, location,
       category, date, time, totalTickets
     } = req.body;
 
     const organizerId = req.user._id;
-    const event = new eventModel({
-      EventID,
-      title,
-      description,
-      location,
-      category,
-      date,
-      time,
-      totalTickets,
-      organizer: organizerId
-    });
 
     try {
+      // Check for duplicate event
+      const existingEvent = await eventModel.findOne({ title, date, time });
+      if (existingEvent) {
+        return res.status(409).json({ message: "An event with the same title, date, and time already exists." });
+      }
+
+      // Create new event
+      const event = new eventModel({
+        title,
+        description,
+        location,
+        category,
+        date,
+        time,
+        totalTickets,
+        organizer: organizerId
+      });
+
       await event.save();
       return res.status(201).json(event);
     } catch (error) {
@@ -52,7 +59,7 @@ const eventController = {
 
   getEventAnalysis: async (req, res) => {
     try {
-      const organizerId = req.user.id; // Organizer's ID from token/session
+      const organizerId = req.user._id; // Organizer's ID from token/session
 
       // Find all events organized by this user
       const events = await eventModel.find({ organizer: organizerId });
@@ -83,7 +90,7 @@ const eventController = {
 
   getEventDetails: async (req, res) => {
     try {
-      const eventId = req.params.id;
+      const eventId = req.params._id;
       const event = await eventModel.findById(eventId);
 
       if (!event) {

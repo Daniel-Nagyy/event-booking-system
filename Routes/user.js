@@ -6,26 +6,21 @@ const router = express.Router();
 const authorizationMiddleware = require("../Middleware/authorizationMiddleware");
 const authenticationMiddleware=require("../Middleware/authenticationMiddleware")
 
-router.get("/bookings", authorizationMiddleware('User'), bookingController.getUserBookings);
-
-router.get("/",authorizationMiddleware('Admin'), userController.getAllUsers);
 
 
-router.get("/bookings", authorizationMiddleware('User'), bookingController.getUserBookings);
-
-router.get('/profile',authorizationMiddleware('Admin ,Organizer,User'),userController.getUserProfile);
-
-router.put("/profile",authorizationMiddleware('Admin ,Organizer,User'),userController.updateUser);
-
-router.get('/events',userController.getUserEvents);
-
-//get event analysis
-router.get('/events/analysis', authorizationMiddleware('Organizer'), eventsController.getEventAnalysis);
-//leave the routes that have :id after the routes that does not have :id
-//it doesnt allow the static routes to go through 
-router.put("/events/:id",authorizationMiddleware('Admin', 'Organizer'),eventsController.updateEvent);
-router.delete('/:id', authorizationMiddleware('Admin'),userController.deleteUser);
+router.get("/",authorizationMiddleware('Admin'),userController.getAllUsers);
 router.get("/:id", authorizationMiddleware('Admin'), userController.getUserById);
+router.put("/:id", authorizationMiddleware('Admin'), userController.updateRole);
+router.delete("/:id", authorizationMiddleware('Admin'), userController.deleteUser);
+
+router.get("/bookings",bookingController.getUserBookings);
+
+router.get('/events',authorizationMiddleware('Organizer'),userController.getUserEvents);
+router.get('/events/analytics',authorizationMiddleware('Admin'),eventsController.getEventAnalysis);
+
+router.get('/profile',userController.getUserProfile);
+
+router.put('/profile',userController.updateUser);
 
 
 module.exports = router;
