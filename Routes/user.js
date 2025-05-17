@@ -1,13 +1,26 @@
 const express = require('express');
+const bookingController = require('../Controllers/bookingController');
+const eventsController = require('../Controllers/eventController');
 const userController = require("../Controllers/userController");
 const router = express.Router();
 const authorizationMiddleware = require("../Middleware/authorizationMiddleware");
-const authenticationMiddleware = require("../Middleware/authenticationMiddleware");
-//Admin roles
-router.get("/Users",authorizationMiddleware('Admin'),userController.getAllUsers);
-router.put("/api/v1/users/:id",authorizationMiddleware('Admin'),userController.updateRole);
-//User specific roles
-router.put("/Users/profile/:id",authorizationMiddleware('User'),userController.updateUser);
+const authenticationMiddleware=require("../Middleware/authenticationMiddleware")
+
+
+
+router.get("/",authorizationMiddleware('Admin'),userController.getAllUsers);
+router.get("/:id", authorizationMiddleware('Admin'), userController.getUserById);
+router.put("/:id", authorizationMiddleware('Admin'), userController.updateRole);
+router.delete("/:id", authorizationMiddleware('Admin'), userController.deleteUser);
+
+router.get("/bookings",bookingController.getUserBookings);
+
+router.get('/events',authorizationMiddleware('Organizer'),userController.getUserEvents);
+router.get('/events/analytics',authorizationMiddleware('Admin'),eventsController.getEventAnalysis);
+
+router.get('/profile',userController.getUserProfile);
+
+router.put('/profile',userController.updateUser);
 
 
 module.exports = router;

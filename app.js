@@ -1,22 +1,26 @@
-const express = require('express');
+const express = require("express");
 const mongoose = require("mongoose");
-const cookieParser=require('cookie-parser')
-const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
+
 const User = require("./Models/user");
 const app = express();
-const authRouter = require("./Routes/auth");
-const userRouter = require("./Routes/user");
-
-const authorizationMiddleware = require("./Middleware/authorizationMiddleware");
+const userRoutes = require("./Routes/user");
+const eventRoutes = require("./Routes/event");
+const authRoutes = require("./Routes/auth");
+const bookingRoutes= require("./Routes/booking");
 const authenticationMiddleware=require('./Middleware/authenticationMiddleware');
+const authrizationMiddleware = require("./Middleware/authorizationMiddleware");
+
+const cors = require("cors");
+
 
 require('dotenv').config();
 
-// Middleware to parse JSON body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser())
 
+app.use(cookieParser())
 
 app.use(
   cors({
@@ -26,23 +30,35 @@ app.use(
   })
 );
 
+app.use("/api/v1", authRoutes);
 
-const DB_URL = process.env.DB_URL;
+//to check if the user is authrized 
+app.use(authenticationMiddleware);
+
+//to get the user booking
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/bookings", bookingRoutes);
+
+app.use("/api/v1/events", eventRoutes);
+
+const db_name = process.env.DB_NAME;
+
+const db_url = `${process.env.DB_URL}/${db_name}`; // if it gives error try to change the localhost to 127.0.0.1
+
+
+
+// Middleware to parse JSON body
+app.use(express.json());
+
 mongoose
-  .connect(
-    process.env.DB_URL,
-  )
+  .connect(db_url)
   .then(() => console.log("MongoDB connected"))
   .catch((e) => {
     console.log(e);
   });
 
-  app.listen(process.env.PORT, () =>  console.log(`Server started, listening on port ${process.env.PORT}!`));
+app.use(function (req, res, next) {
+  return res.status(404).send("404");
+});
+app.listen(process.env.PORT, () => console.log("server started"));
 
-  app.get('/test',(req , res)=>{
-    res.send("testing");
-  });
-
-  app.use("/api/v1",authRouter); 
-  app.use(authenticationMiddleware);
-  app.use ("/api/v1",userRouter);

@@ -4,11 +4,6 @@ const Event = require("./Event");
 const User = require("./user");
 
 const bookingSchema = new Schema({
-  BookingID: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
   event: {
     type: Schema.Types.ObjectId,
     ref: "Event",
@@ -28,7 +23,7 @@ const bookingSchema = new Schema({
   },
   bookingStatus: {
     type: String,
-    enum: ["Pending", "Confirmed", "Cancelled"],
+    enum: ["Pending", "approved", "Cancelled"],
     default: "Pending",
   }
 }, { timestamps: true });

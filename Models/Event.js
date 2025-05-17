@@ -5,11 +5,6 @@ const Organizer = require("./Organizer");
 const Schema = mongoose.Schema;
 
 const eventSchema = new Schema({
-  EventID: {
-    type: Number,
-    required: true,
-    unique: true,
-  },
   title: {
     type: String,
     required: true,
@@ -63,6 +58,11 @@ const eventSchema = new Schema({
   image: {
     type: String,
     default: "default.jpg",
+  },
+  status: {
+    type: String,
+    enum: ["Pending", "approved", "Cancelled"],
+    default: "Pending",
   }
 }, { timestamps: true });
 
