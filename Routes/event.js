@@ -5,7 +5,7 @@ const userController = require("../Controllers/userController");
 const eventController = require("../Controllers/eventController");
 const authorizationMiddleware = require("../Middleware/authorizationMiddleware");
 // Create a new eventModel
-router.get('/all/',authorizationMiddleware('Admin'), eventController.getAllEvents);
+router.get('/all/', eventController.getAllEvents);
  router.delete('/:id', authorizationMiddleware(['Organizer','Admin']), eventController.deleteEvent);
 // //delete an event 
 // // GET /api/v1/events/:id - Get details of a single event (public)

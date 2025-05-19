@@ -1,47 +1,62 @@
-import React from 'react';
+import React, { useState ,useEffect} from 'react';
+import UserTable from '../components/userTable';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
-function UsersPage() {
+function UserPage() {
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
-  const users = [
-    { id: 1, name: 'Alice Johnson', email: 'alice@example.com', role: 'Admin' },
-    { id: 2, name: 'Bob Smith', email: 'bob@example.com', role: 'User' },
-    { id: 3, name: 'Charlie Davis', email: 'charlie@example.com', role: 'Moderator' }
-  ];
+  useEffect(() => {
+    axios({
+      method: 'get',
+      url: 'http://localhost:3000/api/v1/users'
+    })
+      .then(res => {
+        setUsers(res.data); // Update state with fetched data
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }, []);
+
+  const updateRole = (id) => {
+    axios({
+      method: 'put',
+      url: `http://localhost:3000/api/v1/users/${id}`,
+      data: {
+        role: 'newRole' // Replace with actual new role value
+      }
+    })
+      .then((res) => {
+        console.log('Role updated:', res.data);
+      })
+      .catch((err) => {
+        console.error('Error updating role:', err);
+      });
+  };
+  
+
+  const deleteUser = (id) => {
+    axios.delete(`http://localhost:3000/api/v1/users/${id}`)
+      .then((res) => {
+        console.log('User deleted:', res.data);
+  
+        // Update the users state by filtering out the deleted user
+        setUsers(prevUsers => prevUsers.filter(user => user._id !== id));
+      })
+      .catch((err) => {
+        console.error('Error deleting user:', err);
+      });
+  };
 
   return (
     <div>
+      <button onClick={() => navigate('/admin')}>← Back to Admin</button>
       <h2>Users</h2>
-      
-      {/* 🔙 Back Button */}
-      <button onClick={() => navigate('/admin')}>← Back to Admin Menu</button>
-
-      <table border="1" cellPadding="10" cellSpacing="0" style={{ marginTop: '20px' }}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Actions</th> {/* For Update/Delete buttons */}
-          </tr>
-        </thead>
-        <tbody>
-          {users.map(user => (
-            <tr key={user.id}>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td>
-                <button onClick={() => alert(`Update role for ${user.name}`)}>Update Role</button>
-                <button onClick={() => alert(`Delete ${user.name}`)} style={{ marginLeft: '10px' }}>Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <UserTable users={users} onUpdateRole={updateRole} onDelete={deleteUser} />
     </div>
   );
 }
 
-export default UsersPage;
+export default UserPage;
