@@ -137,15 +137,17 @@ const userController = {
   {
     try {
       const userID = req.user._id;
-      const events = await eventModel.find({participants: userID})
+      const events = await eventModel.find({ organizer: userID });
       if(events.length ==0)
       {
+        console.log("no events found for the user")
         return res.status(200).json({message: "no events found for the user"});
       }
+      console.log("events found for the user")
       return res.status(200).json(events);
     }
     catch (error){
-      return res.status(500).json({message: "error getting events"});
+      return res.status(500).json({message: "error getting events" + error});
     }
   },
   getUserById: async (req, res) => 
@@ -161,21 +163,7 @@ const userController = {
     }
   },
 
-  getUserEvents: async(req,res)=>
-  {
-    try {
-      const userID = req.user._id;
-      const events = await eventModel.find({participants: userID})
-      if(events.length ==0)
-      {
-        return res.status(200).json({message: "no events found for the user"});
-      }
-      return res.status(200).json(events);
-    }
-    catch (error){
-      return res.status(500).json({message: "error getting events"});
-    }
-  }, 
+
 
 
   getUserProfile: async (req, res) => {

@@ -1,0 +1,36 @@
+.my-events-container {
+    padding: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.my-events-container h1 {
+    text-align: center;
+    margin-bottom: 32px;
+    color: #333;
+}
+
+.events-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.loading, .error-message, .no-events {
+    text-align: center;
+    padding: 24px;
+    font-size: 18px;
+}
+
+.error-message {
+    color: #e53935;
+    background-color: rgba(229, 57, 53, 0.1);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.no-events {
+    color: #757575;
+    font-style: italic;
+}

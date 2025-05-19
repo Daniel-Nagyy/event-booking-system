@@ -24,7 +24,8 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.3",
-    "nodemailer": "^6.10.1"
+    "nodemailer": "^6.10.1",
+    "react-router-dom": "^6.30.0"
   },
   "devDependencies": {
     "jsonwebtoken": "^9.0.2",
