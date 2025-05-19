@@ -25,7 +25,7 @@ app.use(cookieParser())
 app.use(
   cors({
     origin: 'http://localhost:5173',
-    methods: ["GET", "POST", "DELETE", "PUT"],
+    methods: ["GET", "POST", "DELETE", "PUT","PATCH"],
     credentials: true,
   })
 );
@@ -33,14 +33,14 @@ app.use(
 app.use("/api/v1", authRoutes);
 
 app.use("/api/v1/events", eventRoutes);
-
+app.use("/api/v1/users", userRoutes);
 
 //to check if the user is authrized 
 app.use(authenticationMiddleware);
 
 //to get the user booking
 app.use("/api/v1/bookings", bookingRoutes);
-app.use("/api/v1/users", userRoutes);
+
 
 const db_name = process.env.DB_NAME;
 

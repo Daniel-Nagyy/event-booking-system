@@ -16,6 +16,8 @@ router.get('/all/', eventController.getAllEvents);
 router.post('/', authorizationMiddleware(['Organizer']), eventController.createEvent);
 router.get('/', eventController.getApprovedEvents);
 
-router.patch('/approveevent/:eventId',authorizationMiddleware(['Admin']),eventController.approveEvent);
+router.patch('/approveevent/:eventId',eventController.approveEvent);
+router.patch('/decline/:eventId',eventController.declineEvent);
+
 
 module.exports = router;

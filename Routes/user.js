@@ -8,10 +8,10 @@ const authenticationMiddleware=require("../Middleware/authenticationMiddleware")
 
 
 
-router.get("/",authorizationMiddleware('Admin'),userController.getAllUsers);
+router.get("/",userController.getAllUsers);
 router.get("/:id", authorizationMiddleware('Admin'), userController.getUserById);
 router.put("/:id", authorizationMiddleware('Admin'), userController.updateRole);
-router.delete("/:id", authorizationMiddleware('Admin'), userController.deleteUser);
+router.delete("/:id", userController.deleteUser);
 
 router.get("/bookings",bookingController.getUserBookings);
 
