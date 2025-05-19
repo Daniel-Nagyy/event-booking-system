@@ -22,21 +22,15 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use(cookieParser())
 
-app.use(
-  cors({
-    origin: process.env.ORIGIN,
-    methods: ["GET", "POST", "DELETE", "PUT"],
-    credentials: true,
-  })
-);
+app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 
 app.use("/api/v1", authRoutes);
 
+app.use("/api/v1/users", userRoutes);
 //to check if the user is authrized 
-app.use(authenticationMiddleware);
+//app.use(authenticationMiddleware);
 
 //to get the user booking
-app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/bookings", bookingRoutes);
 
 app.use("/api/v1/events", eventRoutes);
@@ -48,7 +42,6 @@ const db_url = `${process.env.DB_URL}/${db_name}`; // if it gives error try to c
 
 
 // Middleware to parse JSON body
-app.use(express.json());
 
 mongoose
   .connect(db_url)

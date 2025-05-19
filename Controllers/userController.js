@@ -180,16 +180,14 @@ const userController = {
 
   getUserProfile: async (req, res) => {
     try {
-      const userId = req.user._id; 
+      //const userId = req.user._id; 
 
-      const user = await userModel.findById(userId);
+      const user = await userModel.findById('68063203d127146565f56474');
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      res.json({
-       user
-      });
+     res.json({ user });
     } catch (error) {
       console.error("Error in getUserProfile:", error);
       res.status(500).json({ error: 'Internal server error' });
