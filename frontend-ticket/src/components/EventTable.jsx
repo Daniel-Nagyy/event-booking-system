@@ -1,6 +1,4 @@
-// components/EventTable.jsx
-
-function EventTable({ events, onApprove, onDecline }) {
+function EventTable({ events = [], onApprove, onDecline }) {
   if (events.length === 0) {
     return <p>No events found.</p>;
   }
@@ -9,29 +7,27 @@ function EventTable({ events, onApprove, onDecline }) {
     <table>
       <thead>
         <tr>
-          <th>Event Name</th>
+          <th>Event title</th>
           <th>Date</th>
-          <th>Location</th>
           <th>Status</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {events.map(event => (
-          <tr key={event.id}>
-            <td>{event.name}</td>
+        {events.map((event) => (
+          <tr key={event._id}>
+            <td>{event.title}</td>
             <td>{event.date}</td>
-            <td>{event.location}</td>
             <td>{event.status}</td>
             <td>
-              <button onClick={() => onApprove(event.id)}>Approve</button>
-              <button onClick={() => onDecline(event.id)}>Decline</button>
+              <button onClick={() => onApprove(event._id)}>Approve</button>
+              <button onClick={() => onDecline(event._id)}>Decline</button>
             </td>
           </tr>
         ))}
       </tbody>
     </table>
   );
-}
+        }
 
 export default EventTable;

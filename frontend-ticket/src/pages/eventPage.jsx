@@ -1,20 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import EventTable from '../components/EventTable';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function EventPage() {
+  const [events, setEvents] = useState([]); // ✅ Start with empty array to avoid .length error
   const navigate = useNavigate();
-  const [events, setEvents] = useState([
-    { id: 1, name: 'Hackathon', date: '2024-06-01', location: 'Online', status: 'pending' },
-    { id: 2, name: 'Workshop', date: '2024-07-10', location: 'Cairo', status: 'approved' },
-  ]);
 
-  const approveEvent = (id) => {
-    setEvents(prev => prev.map(e => e.id === id ? { ...e, status: 'approved' } : e));
+  // ✅ Fetch all events
+  const fetchEvents = () => {
+    axios.get('http://localhost:3000/api/v1/events/all/')
+      .then(res => {
+        setEvents(res.data); // Adjust this if your backend returns { events: [...] }
+      })
+      .catch(err => {
+        console.error('Error fetching events:', err);
+      });
   };
 
+  useEffect(() => {
+    fetchEvents(); // ✅ Call on mount
+  }, []);
+
+  // ✅ Approve event then refresh
+  const approveEvent = (id) => {
+    axios.patch(`http://localhost:3000/api/v1/events/approveevent/${id}`)
+      .then((res) => {
+        console.log('Event approved:', res.data);
+        fetchEvents(); // ✅ Refresh the table
+      })
+      .catch((err) => {
+        console.error('Error approving event:', err);
+      });
+  };
+
+  // ✅ Decline event then refresh
   const declineEvent = (id) => {
-    setEvents(prev => prev.map(e => e.id === id ? { ...e, status: 'declined' } : e));
+    axios.patch(`http://localhost:3000/api/v1/events/decline/${id}`)
+      .then((res) => {
+        console.log('Event declined:', res.data);
+        fetchEvents(); // ✅ Refresh the table
+      })
+      .catch((err) => {
+        console.error('Error declining event:', err);
+      });
   };
 
   return (
