@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import EventCard from './Components/EventCard';
 import MyEventsPage from './Pages/MyEventsPage';
+import EventForm from './Components/EventForm';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -28,6 +29,8 @@ function App() {
           </div>
         } />
         <Route path="/my-events" element={<MyEventsPage />} />
+        <Route path="/my-events/new" element={<EventForm />} />
+        <Route path="/my-events/:id/edit" element={<EventForm />} />
       </Routes>
     </BrowserRouter>
   );

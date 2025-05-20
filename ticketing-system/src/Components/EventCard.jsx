@@ -1,16 +1,20 @@
 import './EventCard.css';
 import eventImage from '../elements/event-pic.jpeg';
-function EventCard(props) {
+import { Link } from 'react-router-dom';
+
+function EventCard({ id, title, description, location, date }) {
     return (
-        <div className="card">
-            <img src={eventImage} alt="Event 1" />
-            <div className="card__content">
-                <p className="card__title">{props.title}</p>
-                <p className="card__description">{props.description}</p>
-                <p className="card__description">{props.location}</p>
-                <p className="card__description">{props.date}</p>
+        <Link to={`/my-events/${id}/edit`} className="card-link">
+            <div className="card">
+                <img src={eventImage} alt={title} />
+                <div className="card__content">
+                    <p className="card__title">{title}</p>
+                    <p className="card__description">{description}</p>
+                    <p className="card__description">{location}</p>
+                    <p className="card__description">{date}</p>
+                </div>
             </div>
-        </div>
+        </Link>
     );
 }
 

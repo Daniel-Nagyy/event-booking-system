@@ -2,12 +2,53 @@
     padding: 32px;
     max-width: 1200px;
     margin: 0 auto;
+    background-color: #eeeeee;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 40px;
+}
+
+/* Added page-header to align title and button */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #eaeaea; 
 }
 
 .my-events-container h1 {
-    text-align: center;
-    margin-bottom: 32px;
+    /* text-align: center; remove to align left */
+    margin-bottom: 0; /* Adjusted as padding-bottom is on page-header */
     color: #333;
+    font-size: 32px;
+    /* border-bottom: 1px solid #eaeaea; Moved to page-header */
+    /* padding-bottom: 16px; Moved to page-header */
+}
+
+/* Style for the Create New Event button */
+.create-event-button {
+    background: linear-gradient(135deg, #7b61ff, #5e45d8);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 15px rgba(123, 97, 255, 0.2);
+}
+
+.create-event-button:hover {
+    background: linear-gradient(135deg, #6a50e0, #4d37c0);
+    box-shadow: 0 6px 20px rgba(123, 97, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.create-event-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(123, 97, 255, 0.2);
 }
 
 .events-grid {
@@ -17,20 +58,31 @@
     margin-top: 24px;
 }
 
-.loading, .error-message, .no-events {
+.loading {
     text-align: center;
     padding: 24px;
     font-size: 18px;
+    color: #666;
 }
 
 .error-message {
-    color: #e53935;
-    background-color: rgba(229, 57, 53, 0.1);
-    border-radius: 8px;
+    color: #d32f2f;
+    background-color: #ffebee;
     padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 18px;
+    margin: 24px auto;
+    max-width: 800px;
 }
 
 .no-events {
     color: #757575;
     font-style: italic;
+    text-align: center;
+    padding: 24px;
+    font-size: 18px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    margin: 24px 0;
 }

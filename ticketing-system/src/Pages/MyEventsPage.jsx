@@ -1,8 +1,9 @@
 import EventCard from '../Components/EventCard';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import './MyEventsPage.css';
+import { useNavigate, Link } from 'react-router-dom';
+
 
 function MyEventsPage() {
     const [events, setEvents] = useState([]);
@@ -66,11 +67,17 @@ function MyEventsPage() {
     // Render events
     return (
         <div className="my-events-container">
-            <h1>My Events</h1>
+            <div className="page-header">
+                <h1>My Events</h1>
+                <Link to="/my-events/new" className="create-event-button">
+                    Create New Event
+                </Link>
+            </div>
             <div className="events-grid">
                 {events.map(event => (
                     <EventCard 
                         key={event._id}
+                        id={event._id}
                         title={event.title}
                         description={event.description}
                         location={event.location}
