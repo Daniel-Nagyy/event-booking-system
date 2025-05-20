@@ -2,7 +2,7 @@ const bookingModel = require("../Models/Booking");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const mongoose = require("mongoose");
-const secretKey = process.env.SECRET_KEY;
+const secretKey = process.env.secretKey;
 const eventModel = require('../Models/Event');
 const bcrypt = require("bcrypt");
 const bookingController = {

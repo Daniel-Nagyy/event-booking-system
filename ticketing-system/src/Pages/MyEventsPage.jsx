@@ -9,6 +9,7 @@ function MyEventsPage() {
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         // Function to fetch events
@@ -44,6 +45,10 @@ function MyEventsPage() {
         fetchEvents();
     }, []);
 
+    const handleEventDeleted = (deletedEventId) => {
+        setEvents(prevEvents => prevEvents.filter(event => event._id !== deletedEventId));
+    };
+
     // Loading state
     if (loading) {
         return <div className="loading">Loading events...</div>;
@@ -69,9 +74,14 @@ function MyEventsPage() {
         <div className="my-events-container">
             <div className="page-header">
                 <h1>My Events</h1>
-                <Link to="/my-events/new" className="create-event-button">
-                    Create New Event
-                </Link>
+                <div className="page-header-actions">
+                    <Link to="/my-events/new" className="create-event-button">
+                        Create New Event
+                    </Link>
+                    <Link to="/my-events/analytics" className="analytics-button page-header-button">
+                        View Analytics
+                    </Link>
+                </div>
             </div>
             <div className="events-grid">
                 {events.map(event => (
@@ -82,6 +92,7 @@ function MyEventsPage() {
                         description={event.description}
                         location={event.location}
                         date={new Date(event.date).toLocaleDateString()}
+                        onDelete={handleEventDeleted}
                     />
                 ))}
             </div>

@@ -1,7 +1,7 @@
 const eventModel = require('../Models/Event');
 const bookingModel = require('../Models/Booking');
 require("dotenv").config();
-const secretKey = process.env.SECRET_KEY;
+const secretKey = process.env.secretKey;
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
@@ -91,7 +91,7 @@ const eventController = {
 
   getEventDetails: async (req, res) => {
     try {
-      const eventId = req.params._id;
+      const eventId = req.params.id;
       const event = await eventModel.findById(eventId);
 
       if (!event) {

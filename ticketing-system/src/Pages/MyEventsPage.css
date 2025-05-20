@@ -18,6 +18,12 @@
     border-bottom: 1px solid #eaeaea; 
 }
 
+/* Container for action buttons in the header */
+.page-header-actions {
+    display: flex;
+    gap: 15px; /* Space between buttons */
+}
+
 .my-events-container h1 {
     /* text-align: center; remove to align left */
     margin-bottom: 0; /* Adjusted as padding-bottom is on page-header */
@@ -49,6 +55,34 @@
 .create-event-button:active {
     transform: translateY(0);
     box-shadow: 0 2px 10px rgba(123, 97, 255, 0.2);
+}
+
+/* Common style for header buttons */
+.page-header-button {
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+/* Specific style for Analytics button - can use a different color */
+.analytics-button {
+    background: linear-gradient(135deg, #11A6A6, #0D8282); /* Teal gradient */
+    box-shadow: 0 4px 15px rgba(17, 166, 166, 0.2);
+}
+
+.analytics-button:hover {
+    background: linear-gradient(135deg, #0D8282, #0A6B6B);
+    box-shadow: 0 6px 20px rgba(17, 166, 166, 0.3);
+    transform: translateY(-2px);
+}
+
+.analytics-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(17, 166, 166, 0.2);
 }
 
 .events-grid {

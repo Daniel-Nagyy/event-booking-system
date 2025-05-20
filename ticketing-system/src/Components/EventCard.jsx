@@ -1,11 +1,32 @@
 import './EventCard.css';
 import eventImage from '../elements/event-pic.jpeg';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-function EventCard({ id, title, description, location, date }) {
+function EventCard({ id, title, description, location, date, onDelete }) {
+    const navigate = useNavigate();
+
+    const handleDelete = async (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (window.confirm("Are you sure you want to delete this event?")) {
+            try {
+                await axios.delete(`/api/v1/events/${id}`, { withCredentials: true });
+                alert("Event deleted successfully!");
+                if (onDelete) {
+                    onDelete(id);
+                }
+            } catch (err) {
+                console.error("Error deleting event:", err);
+                alert(`Failed to delete event: ${err.response?.data?.message || err.message}`);
+            }
+        }
+    };
+
     return (
-        <Link to={`/my-events/${id}/edit`} className="card-link">
-            <div className="card">
+        <div className="card">
+            <Link to={`/my-events/${id}/edit`} className="card-link-content">
                 <img src={eventImage} alt={title} />
                 <div className="card__content">
                     <p className="card__title">{title}</p>
@@ -13,8 +34,11 @@ function EventCard({ id, title, description, location, date }) {
                     <p className="card__description">{location}</p>
                     <p className="card__description">{date}</p>
                 </div>
-            </div>
-        </Link>
+            </Link>
+            <button onClick={handleDelete} className="delete-event-button">
+                Delete
+            </button>
+        </div>
     );
 }
 

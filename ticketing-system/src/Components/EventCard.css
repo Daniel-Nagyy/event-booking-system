@@ -65,4 +65,40 @@
 
 .card:hover img {
   scale: 0;
+}
+
+/* Styles for the content area when card is a div */
+.card-link-content {
+    text-decoration: none;
+    color: inherit;
+    display: flex; /* if you want image and content side-by-side initially */
+    align-items: center; /* if side-by-side */
+    width: 100%;
+    height: 100%; /* ensure it fills the card before hover for consistent click */
+}
+
+.delete-event-button {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    z-index: 10; /* Ensure it's above other card content if overlapping */
+}
+
+.delete-event-button:hover {
+    background-color: #d9363e;
+}
+
+/* Adjust card content positioning if delete button overlaps too much on hover */
+.card:hover .card__content {
+    /* Maybe reduce padding-bottom if delete button is there */
+    /* padding-bottom: 40px; Example */
 } 
