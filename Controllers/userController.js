@@ -114,7 +114,7 @@ const userController = {
   updateUser: async (req,res)=> {
     try {
       const user = await userModel.findByIdAndUpdate(
-        req.params.id,
+        '68063203d127146565f56474',
         {
           name: req.body.name,
           email: req.body.email,

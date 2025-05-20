@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function ProfilePage() {
   const [user, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const goToEditProfile = () => {
+    navigate("/profile/edit");
+  };
 
   useEffect(() => {
     axios
@@ -17,8 +23,6 @@ function ProfilePage() {
         setLoading(false);
       });
   }, []);
-
-  if (loading) return <p>Loading...</p>;
 
   const styles = {
     container: {
@@ -68,6 +72,16 @@ function ProfilePage() {
       fontWeight: "bold",
       color: "#111827",
       marginBottom: "0.5rem",
+    },
+    loadingSpinner: {
+      width: "2.5rem",
+      height: "2.5rem",
+      border: "4px solid #e5e7eb",
+      borderTop: "4px solid #3b82f6",
+      borderRadius: "50%",
+      animation: "spin 1s linear infinite",
+      margin: "4rem auto",
+      display: "block",
     },
     userRole: {
       fontSize: "1.125rem",
@@ -158,6 +172,12 @@ function ProfilePage() {
       marginRight: "0.5rem",
     },
   };
+
+  // Add keyframes for spinner animation
+  const spinnerStyle = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
+
+  if (loading) return <><style>{spinnerStyle}</style><div style={styles.loadingSpinner}></div></>;
+
   return (
     <div style={styles.container}>
       <div style={styles.wrapper}>
@@ -206,6 +226,7 @@ function ProfilePage() {
                 onMouseLeave={(e) =>
                   (e.target.style.backgroundColor = "#3b82f6")
                 }
+                onClick={goToEditProfile}
               >
                 Edit Profile
               </button>

@@ -21,7 +21,7 @@ const authenticationMiddleware=require("../Middleware/authenticationMiddleware")
  router.get('/profile',userController.getUserProfile);
 
 
-// router.put('/profile',userController.updateUser);
+ router.put('/profile',userController.updateUser);
 
 
 module.exports = router;
