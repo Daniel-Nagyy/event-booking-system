@@ -262,30 +262,26 @@ const userController = {
     }
   },
 
-  updateRole: async (req, res)=>{
-    try
-    {
-        const newRole = req.newRole
-
-        if(!newRole) return res.status(400).message("Empty role")
-        //changed UserModel to userModel
-        const user = await userModel.findByIdAndUpdate(req.params.id,
-
-            {
-                role: req.body.role
-            },
-            {
-                new: true, 
-            }
-        );
-        return res.status(200).message("Role Updated Successfully")
-        
-    }
   
-    catch(err)
-    {
-        return res.status(500).json({message: err.message});
-    }
+updateRole: async (req, res) => {
+  try {
+    const newRole = req.body.role; // get new role from request body
+
+    if (!newRole) return res.status(400).json({ message: "Empty role" });
+
+    const user = await userModel.findByIdAndUpdate(
+      req.params.id,
+      { role: newRole },
+      { new: true } // return updated document
+    );
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    console.log("updated");
+    return res.status(200).json({ message: "Role Updated Successfully", user });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
 }
 
 

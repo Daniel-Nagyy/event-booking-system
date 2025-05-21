@@ -20,21 +20,23 @@ function UserPage() {
       });
   }, []);
 
-  const updateRole = (id) => {
-    axios({
-      method: 'put',
-      url: `http://localhost:3000/api/v1/users/${id}`,
-      data: {
-        role: 'newRole' // Replace with actual new role value
-      }
-    })
-      .then((res) => {
-        console.log('Role updated:', res.data);
-      })
-      .catch((err) => {
-        console.error('Error updating role:', err);
-      });
-  };
+  
+const updateRole = (id, newRole) => {
+  axios.put(`http://localhost:3000/api/v1/users/${id}`, {
+    role: newRole
+  })
+  .then((res) => {
+    console.log('Role updated:', res.data);
+    setUsers(prevUsers =>
+      prevUsers.map(user =>
+        user._id === id ? { ...user, role: newRole } : user
+      )
+    );
+  })
+  .catch((err) => {
+    console.error('Error updating role:', err);
+  });
+};
   
 
   const deleteUser = (id) => {
