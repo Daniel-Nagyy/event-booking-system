@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { profileService } from "../services/api";
 
 function EditProfile() {
   const navigate = useNavigate();
@@ -159,13 +159,13 @@ function EditProfile() {
   const fetchUserProfile = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("http://localhost:3000/api/v1/users/profile");
+      const response = await profileService.viewprofile();
       const userData = response.data.user;
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         name: userData.name || "",
         email: userData.email || "",
-        preview: userData.profilePicture || null
+        preview: userData.profilePicture || null,
       }));
     } catch (err) {
       setError("Failed to load profile. Please try again.");
@@ -183,16 +183,16 @@ function EditProfile() {
       if (file) {
         const reader = new FileReader();
         reader.onloadend = () => {
-          setFormData(prev => ({
+          setFormData((prev) => ({
             ...prev,
             profilePicture: file,
-            preview: reader.result
+            preview: reader.result,
           }));
         };
         reader.readAsDataURL(file);
       }
     } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
+      setFormData((prev) => ({ ...prev, [name]: value }));
     }
   };
 
@@ -201,10 +201,10 @@ function EditProfile() {
     try {
       setLoading(true);
       setError(null);
-      
+
       const dataToSend = {
         name: formData.name,
-        email: formData.email
+        email: formData.email,
       };
 
       if (formData.profilePicture) {
@@ -212,12 +212,9 @@ function EditProfile() {
         reader.readAsDataURL(formData.profilePicture);
         reader.onloadend = async () => {
           dataToSend.profilePicture = reader.result;
-          
+
           try {
-            const response = await axios.put(
-              "http://localhost:3000/api/v1/users/profile",
-              dataToSend
-            );
+            const response = await profileService.editProfile(dataToSend);
 
             if (response.data.user) {
               setSuccess(true);
@@ -225,12 +222,15 @@ function EditProfile() {
                 navigate("/profile");
               }, 1500);
             } else {
-              throw new Error(response.data.message || "Failed to update profile");
+              throw new Error(
+                response.data.message || "Failed to update profile"
+              );
             }
           } catch (err) {
-            const errorMessage = err.response?.data?.message || 
-                              err.message || 
-                              "Failed to update profile. Please try again.";
+            const errorMessage =
+              err.response?.data?.message ||
+              err.message ||
+              "Failed to update profile. Please try again.";
             setError(errorMessage);
             console.error("Error updating profile:", err);
           } finally {
@@ -238,10 +238,7 @@ function EditProfile() {
           }
         };
       } else {
-        const response = await axios.put(
-          "http://localhost:3000/api/v1/users/profile",
-          dataToSend
-        );
+        const response = await profileService.editProfile(dataToSend);
 
         if (response.data.user) {
           setSuccess(true);
@@ -254,9 +251,10 @@ function EditProfile() {
         setLoading(false);
       }
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 
-                          err.message || 
-                          "Failed to update profile. Please try again.";
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "Failed to update profile. Please try again.";
       setError(errorMessage);
       console.error("Error updating profile:", err);
       setLoading(false);
@@ -283,7 +281,7 @@ function EditProfile() {
       <div style={styles.wrapper}>
         <div style={styles.profileCard}>
           <div style={styles.header}></div>
-          
+
           <div style={styles.profileContent}>
             <label style={styles.profileImageContainer}>
               <img

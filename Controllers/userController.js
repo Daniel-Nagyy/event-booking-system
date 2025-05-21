@@ -113,8 +113,9 @@ const userController = {
 
   updateUser: async (req,res)=> {
     try {
+      const userId = req.user._id; 
       const user = await userModel.findByIdAndUpdate(
-        '68063203d127146565f56474',
+        userId,
         {
           name: req.body.name,
           email: req.body.email,
@@ -180,9 +181,9 @@ const userController = {
 
   getUserProfile: async (req, res) => {
     try {
-      //const userId = req.user._id; 
+      const userId = req.user._id; 
 
-      const user = await userModel.findById('68063203d127146565f56474');
+      const user = await userModel.findById(userId);
       if (!user) {
         return res.status(404).json({ error: 'User not found' });
       }

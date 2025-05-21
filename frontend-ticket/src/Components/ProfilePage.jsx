@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { profileService } from "../services/api"; // Import authService
 
 function ProfilePage() {
   const [user, setProfile] = useState(null);
@@ -12,8 +12,9 @@ function ProfilePage() {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/v1/users/profile")
+    // Use the profileService.viewprofile function
+    profileService
+      .viewprofile()
       .then((response) => {
         setProfile(response.data.user);
         setLoading(false);
@@ -176,7 +177,13 @@ function ProfilePage() {
   // Add keyframes for spinner animation
   const spinnerStyle = `@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }`;
 
-  if (loading) return <><style>{spinnerStyle}</style><div style={styles.loadingSpinner}></div></>;
+  if (loading)
+    return (
+      <>
+        <style>{spinnerStyle}</style>
+        <div style={styles.loadingSpinner}></div>
+      </>
+    );
 
   return (
     <div style={styles.container}>

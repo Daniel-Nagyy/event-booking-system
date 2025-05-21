@@ -26,9 +26,12 @@ app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
 
 app.use("/api/v1", authRoutes);
 
-app.use("/api/v1/users", userRoutes);
+
+
 //to check if the user is authrized 
-//app.use(authenticationMiddleware);
+app.use(authenticationMiddleware);
+
+app.use("/api/v1/users", userRoutes);
 
 //to get the user booking
 app.use("/api/v1/bookings", bookingRoutes);
