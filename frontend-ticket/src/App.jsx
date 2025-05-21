@@ -12,7 +12,7 @@ function App() {
       <Routes>
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/edit" element={<EditProfile />} />
-        <Route path="/login" element={<Login></Login>} />
+        <Route path="/login" element={<Login></Login>}></Route>
       </Routes>
       <Footer></Footer>
     </Router>
