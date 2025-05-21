@@ -5,7 +5,7 @@ const userController = require("../Controllers/userController");
 const eventController = require("../Controllers/eventController");
 const authorizationMiddleware = require("../Middleware/authorizationMiddleware");
 // Create a new eventModel
-router.get('/all/', eventController.getAllEvents);
+router.get('/all/',authorizationMiddleware('Admin'), eventController.getAllEvents);
  router.delete('/:id', authorizationMiddleware(['Organizer','Admin']), eventController.deleteEvent);
 // //delete an event 
 // // GET /api/v1/events/:id - Get details of a single event (public)
@@ -16,8 +16,8 @@ router.get('/all/', eventController.getAllEvents);
 router.post('/', authorizationMiddleware(['Organizer']), eventController.createEvent);
 router.get('/', eventController.getApprovedEvents);
 
-router.patch('/approveevent/:eventId',eventController.approveEvent);
-router.patch('/decline/:eventId',eventController.declineEvent);
+router.patch('/approveevent/:eventId',authorizationMiddleware(['Admin']),eventController.approveEvent);
+router.patch('/decline/:eventId',authorizationMiddleware(['Admin']),eventController.declineEvent);
 
 
 module.exports = router;
