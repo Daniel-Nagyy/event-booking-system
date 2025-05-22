@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import './EventAnalyticsPage.css'; // We'll create this CSS file next
+import { eventService } from '../services/api';
 
 function EventAnalyticsPage() {
     const [analytics, setAnalytics] = useState([]);
@@ -12,10 +13,8 @@ function EventAnalyticsPage() {
             try {
                 setLoading(true);
                 setError(null);
-                // The route in user.js is /events/analytics and is mounted under /api/v1/users
-                const response = await axios.get('/api/v1/users/events/analytics', {
-                    withCredentials: true // Important for authentication/authorization
-                });
+
+                const response = await eventService.getEventsAnalytics();
                 
                 if (response.data && Array.isArray(response.data.analysis)) {
                     setAnalytics(response.data.analysis);

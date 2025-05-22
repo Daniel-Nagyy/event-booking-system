@@ -1,8 +1,8 @@
 import EventCard from '../Components/EventCard';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import './MyEventsPage.css';
 import { useNavigate, Link } from 'react-router-dom';
+import { eventService } from '../services/api';
 
 
 function MyEventsPage() {
@@ -16,10 +16,8 @@ function MyEventsPage() {
         const fetchEvents = async () => {
             try {
                 setLoading(true);
-                // Make API call with credentials to include cookies for auth
-                const response = await axios.get('/api/v1/users/events', {
-                    withCredentials: true
-                });
+                const response = await eventService.getUserEvents();
+                console.log("response: ", response);
                 
                 // Ensure response.data is an array before setting events
                 if (Array.isArray(response.data)) {

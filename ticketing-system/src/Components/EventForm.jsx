@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from 'axios';
+import { eventService } from '../services/api';
 import "./EventForm.css";
 
 function EventForm() {
@@ -23,7 +23,7 @@ function EventForm() {
     useEffect(() => {
         if (isEditing) {
             setLoading(true);
-            axios.get(`/api/v1/events/${id}`, { withCredentials: true })
+            eventService.getEventById(id)
                 .then(response => {
                     const event = response.data;
                     setTitle(event.title);
@@ -52,10 +52,10 @@ function EventForm() {
 
         try {
             if (isEditing) {
-                await axios.put(`/api/v1/events/${id}`, eventData, { withCredentials: true });
+                await eventService.updateEvent(id, eventData);
                 navigate('/my-events');
             } else {
-                await axios.post('/api/v1/events', eventData, { withCredentials: true });
+                await eventService.createEvent(eventData);
                 navigate('/my-events');
             }
         } catch (err) {

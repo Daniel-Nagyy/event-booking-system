@@ -12,7 +12,7 @@ router.get("/",authorizationMiddleware('Admin'),userController.getAllUsers);
 // Specific routes FIRST
 router.get("/bookings",bookingController.getUserBookings);
 router.get('/events',authorizationMiddleware('Organizer'),userController.getUserEvents);
-router.get('/events/analytics',authorizationMiddleware(['Admin','Organizer']),eventsController.getEventAnalysis);//TODO: check which type of user to allow
+router.get('/events/analytics',authorizationMiddleware(['Admin','Organizer']),eventsController.getEventAnalysis);
 router.get('/profile',userController.getUserProfile);
 router.put('/profile',userController.updateUser);
 
