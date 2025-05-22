@@ -76,7 +76,7 @@ const eventController = {
 
         return {
           title: event.title,
-          eventId: event.EventID,
+          eventId: event._id,
           percentageBooked: Math.round(percentageBooked),
         };
       });
@@ -113,7 +113,7 @@ const eventController = {
         return res.status(400).json({ message: "Invalid event ID" });
       }
 
-      const allowedFields = ["title", "description", "date", "location", "price"];
+      const allowedFields = ["title", "description", "date", "time", "location", "category", "totalTickets"];
       const updateData = {};
       allowedFields.forEach((field) => {
         if (req.body[field] !== undefined) {
