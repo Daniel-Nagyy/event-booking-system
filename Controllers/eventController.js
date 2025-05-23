@@ -12,7 +12,8 @@ const eventController = {
   createEvent: async (req, res) => {
     const {
       title, description, location,
-      category, date, time, totalTickets
+      category, date, time, totalTickets,
+      price
     } = req.body;
 
     const organizerId = req.user._id;
@@ -33,6 +34,7 @@ const eventController = {
         date,
         time,
         totalTickets,
+        price,
         organizer: organizerId
       });
 
@@ -91,13 +93,13 @@ const eventController = {
 
   getEventDetails: async (req, res) => {
     try {
-      const eventId = req.params._id;
+      const eventId = req.params.id; 
       const event = await eventModel.findById(eventId);
-
+  
       if (!event) {
         return res.status(404).json({ message: 'Event not found' });
       }
-
+  
       res.status(200).json(event);
     } catch (error) {
       console.error(error);

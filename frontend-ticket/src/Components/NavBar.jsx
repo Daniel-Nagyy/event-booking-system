@@ -1,6 +1,7 @@
 import React from "react";
 import { FaSearch, FaUser } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const styles = {
   navContainer: {
@@ -27,6 +28,8 @@ const styles = {
     fontSize: "2rem",
     marginRight: "2.5rem",
     letterSpacing: "0.5px",
+    color: "#222",
+    textDecoration: "none", // Removed underline
   },
   searchContainer: {
     flex: 1,
@@ -75,30 +78,59 @@ const styles = {
 
 const NavBar = () => {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  // Check for user data in localStorage
+  const user = localStorage.getItem('user');
+  const isAuthenticated = user !== null;
+
+  const handleSearch = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim() !== '') {
+      e.preventDefault(); // Prevent default form submission or other key actions
+      console.log('Navigating to events with search query:', searchQuery);
+      // Navigate to the events page with the search query as a URL parameter
+      navigate(`/events?search=${encodeURIComponent(searchQuery)}`);
+      setSearchQuery(''); // Clear the search input after searching
+    }
+  };
+
   return (
     <div style={styles.navContainer}>
       <nav style={styles.navBar}>
-        <span style={styles.logo}>A7gzly</span>
+        <Link to="/" style={styles.logo}>A7gzly</Link>
         <div style={styles.searchContainer}>
           <FaSearch style={styles.searchIcon} />
           <input
             type="text"
             placeholder="Search for events..."
             style={styles.searchInput}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={handleSearch}
           />
         </div>
         <div style={styles.navLinks}>
-          <a href="/events" style={styles.link}>Events</a>
-          <a href="/support" style={styles.link}>Contact & Support</a>
-          <FaUser
-            style={styles.icon}
-            title="Profile"
-            onClick={() => navigate("/profile")}
-            tabIndex={0}
-            role="button"
-            aria-label="Go to profile"
-            onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') navigate("/profile"); }}
-          />
+          <Link to="/events" style={styles.link}>Events</Link>
+          {/* Show My Bookings link for all users */}
+          <Link to="/my-bookings" style={styles.link}>My Bookings</Link>
+          {/* Conditionally render Login/Profile */}
+          {isAuthenticated ? (
+             <FaUser
+              style={styles.icon}
+              title="Profile"
+              onClick={() => navigate("/profile")}
+              tabIndex={0}
+              role="button"
+              aria-label="Go to profile"
+              onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') navigate("/profile"); }}
+            />
+          ) : (
+            <Link to="/login" style={styles.link}>Login</Link>
+          )}
+           {/* Register button always visible */}
+           {!isAuthenticated && (
+            <Link to="/register" style={styles.link}>Register</Link>
+           )}
         </div>
       </nav>
     </div>

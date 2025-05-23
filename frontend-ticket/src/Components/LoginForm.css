@@ -114,7 +114,7 @@
   transition: all 0.3s ease;
 }
 
-.auth-button:hover {
+.auth-button {
   background-color: #2980b9;
 }
 
