@@ -48,7 +48,6 @@ const db_url = `${process.env.DB_URL}/${db_name}`; // if it gives error try to c
 
 
 // Middleware to parse JSON body
-app.use(express.json());
 
 mongoose
   .connect(db_url)

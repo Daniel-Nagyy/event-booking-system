@@ -4,7 +4,7 @@ const organizerModel = require('../Models/Organizer');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
-const secretKey = process.env.secretKey;
+const secretKey = process.env.secretkey;
 //for forgot password
 const nodemailer = require("nodemailer");
 
@@ -75,12 +75,13 @@ const userController = {
       }
 
       const currentDateTime = new Date();
-      const expiresAt = new Date(+currentDateTime + 180000); // expire in 3 minutes
+      const expiresAt = new Date(+currentDateTime + 1800000); // expire in 3 minutes
       // Generate a JWT token
+      console.log(secretKey)
       const token = jwt.sign(
         { user: { _id: user._id, role: user.role } },
         secretKey,
-        { expiresIn: 3 * 600 } // or whatever expiration you want
+        { expiresIn: 3 * 60000 } // or whatever expiration you want
       );
 
       return res
@@ -114,8 +115,9 @@ const userController = {
 
   updateUser: async (req,res)=> {
     try {
+      const userId = req.user._id; 
       const user = await userModel.findByIdAndUpdate(
-        req.params.id,
+        userId,
         {
           name: req.body.name,
           email: req.body.email,
@@ -188,9 +190,7 @@ const userController = {
         return res.status(404).json({ error: 'User not found' });
       }
 
-      res.json({
-       user
-      });
+     res.json({ user });
     } catch (error) {
       console.error("Error in getUserProfile:", error);
       res.status(500).json({ error: 'Internal server error' });

@@ -1,17 +1,14 @@
 import React, { useState ,useEffect} from 'react';
 import UserTable from '../components/userTable';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'
+import {admin} from '../services/api'
 
 function UserPage() {
   const [users, setUsers] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios({
-      method: 'get',
-      url: 'http://localhost:3000/api/v1/users'
-    })
+    admin.getUsers()
       .then(res => {
         setUsers(res.data); // Update state with fetched data
       })
@@ -19,13 +16,12 @@ function UserPage() {
         console.error(err);
       });
   }, []);
+  
 
   
-const updateRole = (id, newRole) => {
-  axios.put(`http://localhost:3000/api/v1/users/${id}`, {
-    role: newRole
-  })
-  .then((res) => {
+  const updateRole = (id, newRole) => {
+    admin.updateRole(id, newRole)
+      .then((res) => {
     console.log('Role updated:', res.data);
     setUsers(prevUsers =>
       prevUsers.map(user =>
@@ -38,9 +34,10 @@ const updateRole = (id, newRole) => {
   });
 };
   
+  
 
   const deleteUser = (id) => {
-    axios.delete(`http://localhost:3000/api/v1/users/${id}`)
+    admin.deleteUser(id)
       .then((res) => {
         console.log('User deleted:', res.data);
   

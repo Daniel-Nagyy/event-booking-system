@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import EventTable from '../components/EventTable';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import {admin} from '../services/api'
 
 function EventPage() {
   const [events, setEvents] = useState([]); // ✅ Start with empty array to avoid .length error
@@ -9,7 +9,7 @@ function EventPage() {
 
   // ✅ Fetch all events
   const fetchEvents = () => {
-    axios.get('http://localhost:3000/api/v1/events/all/')
+    admin.getEvents()
       .then(res => {
         setEvents(res.data); // Adjust this if your backend returns { events: [...] }
       })
@@ -24,7 +24,7 @@ function EventPage() {
 
   // ✅ Approve event then refresh
   const approveEvent = (id) => {
-    axios.patch(`http://localhost:3000/api/v1/events/approveevent/${id}`)
+    admin.approveEvents(id)
       .then((res) => {
         console.log('Event approved:', res.data);
         fetchEvents(); // ✅ Refresh the table
@@ -36,7 +36,7 @@ function EventPage() {
 
   // ✅ Decline event then refresh
   const declineEvent = (id) => {
-    axios.patch(`http://localhost:3000/api/v1/events/decline/${id}`)
+    admin.declineEvents(id)
       .then((res) => {
         console.log('Event declined:', res.data);
         fetchEvents(); // ✅ Refresh the table
