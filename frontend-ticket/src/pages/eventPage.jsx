@@ -47,7 +47,17 @@ function EventPage() {
   };
 
   return (
-    <div>
+    <div
+    style={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center', // vertical centering
+      alignItems: 'center',     // horizontal centering
+      height: '100vh',          // full viewport height
+      textAlign: 'center',      // center text inside children
+      gap: '20px',              // spacing between buttons and heading
+    }}
+    >
       <button onClick={() => navigate('/admin')}>← Back to Admin</button>
       <h2>Events</h2>
       <EventTable events={events} onApprove={approveEvent} onDecline={declineEvent} />

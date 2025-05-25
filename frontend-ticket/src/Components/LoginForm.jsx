@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { authService } from "../services/api";
 import "./LoginForm.css";
 
@@ -9,8 +9,9 @@ const LoginForm = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [error, setError] = useState(location.state?.message || null);
 
   const { email, password } = formData;
 
@@ -32,26 +33,31 @@ const LoginForm = () => {
       setLoading(true);
       setError(null);
 
+      console.log("Attempting login...");
       // Make API request to backend using our authService
       const response = await authService.login({ email, password });
 
       // Debug logging
       console.log("Full response:", response);
       console.log("Response data:", response.data);
-      console.log("Token:", response.data.token);
 
       // Store user data in localStorage
       localStorage.setItem("user", JSON.stringify(response.data.user));
+      console.log("User data stored in localStorage");
 
-      // Redirect to events page or dashboard
-      navigate("/");
+      // Ensure we're not in a loading state before navigating
+      setLoading(false);
+      console.log("Loading state cleared, attempting navigation...");
+      
+      // Navigate to the original destination or home page
+      const destination = location.state?.from || '/';
+      navigate(destination);
     } catch (err) {
       setError(
         err.response?.data?.message ||
           "Login failed. Please check your credentials and try again."
       );
       console.error("Login error:", err);
-    } finally {
       setLoading(false);
     }
   };

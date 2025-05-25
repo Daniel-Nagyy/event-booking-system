@@ -41,6 +41,7 @@ function UserTable({ users, onUpdateRole, onDelete }) {
         ))}
       </tbody>
     </table>
+    
   );
 }
 

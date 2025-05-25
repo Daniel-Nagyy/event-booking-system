@@ -1,10 +1,16 @@
 import React from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate,useLocation } from 'react-router-dom';
 import UsersPage from './adminUser';
 import EventPage from './eventPage';
 
 function Admin() {
+  const location = useLocation();
+  const path = location.pathname;
   const navigate = useNavigate();
+  const height =
+    path === '/admin/user' ? '120vh' :
+    (path === '/admin' || path === '/admin/event') ? '100vh' :
+    'auto'; // fallback
   return (
     <div
       style={{
@@ -12,7 +18,7 @@ function Admin() {
         flexDirection: 'column',
         justifyContent: 'center', // vertical centering
         alignItems: 'center',     // horizontal centering
-        height: '100vh',          // full viewport height
+        height,        // full viewport height
         textAlign: 'center',      // center text inside children
         gap: '20px',              // spacing between buttons and heading
       }}

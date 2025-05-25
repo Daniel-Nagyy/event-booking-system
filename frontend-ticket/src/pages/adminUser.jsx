@@ -50,7 +50,8 @@ function UserPage() {
   };
 
   return (
-    <div>
+    <div
+    >
       <button onClick={() => navigate('/admin')}>← Back to Admin</button>
       <h2>Users</h2>
       <UserTable users={users} onUpdateRole={updateRole} onDelete={deleteUser} />

@@ -4,6 +4,8 @@ function EventTable({ events = [], onApprove, onDecline }) {
   }
 
   return (
+    
+
     <table>
       <thead>
         <tr>
@@ -27,6 +29,7 @@ function EventTable({ events = [], onApprove, onDecline }) {
         ))}
       </tbody>
     </table>
+
   );
         }
 
