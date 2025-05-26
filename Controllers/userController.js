@@ -75,7 +75,7 @@ const userController = {
       }
 
       const currentDateTime = new Date();
-      const expiresAt = new Date(+currentDateTime + 1800000); // expire in 3 minutes
+      const expiresAt = new Date(+currentDateTime + 180000000); // expire in 3 minutes
       // Generate a JWT token
       console.log(secretKey)
       const token = jwt.sign(

@@ -114,13 +114,12 @@ export const bookingService = {
 };
 
 export const admin={
-  getUsers:()=> api.get('/users'),
-  getEvents:() => api.get('/events/all'),
-  approveEvents:(id) => api.patch(`/events/approveevent/${id}`),
-  declineEvents:(id) => api.patch(`/events/decline/${id}`),
-  updateRole:(id,role) =>api.put(`/users/${id}`,{role}),
-  deleteUser:(id) => api.delete(`/users/${id}`)
-
+  getUsers:()=> api.get('/v1/users'),
+  getEvents:() => api.get('/v1/events/all'),
+  approveEvents:(id) => api.patch(`/v1/events/approveevent/${id}`),
+  declineEvents:(id) => api.patch(`/v1/events/decline/${id}`),
+  updateRole:(id,role) =>api.put(`/v1/users/${id}`,{role}),
+  deleteUser:(id) => api.delete(`/v1/users/${id}`)
 }
 
 export const profileService={

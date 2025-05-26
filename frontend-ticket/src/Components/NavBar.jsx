@@ -87,12 +87,29 @@ const NavBar = () => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = React.useState('');
 
+  console.log('NavBar component is rendering...');
+
   // Check for user data and role in localStorage
   const userString = localStorage.getItem('user');
   const user = userString ? JSON.parse(userString) : null;
   const isAuthenticated = user !== null;
   const isOrganizer = user?.role === 'Organizer';
   const isAdmin = user?.role === 'Admin';
+
+  console.log('Direct check - User role:', user?.role, 'isAdmin:', isAdmin);
+
+  // Temporary debugging - remove after fixing
+  React.useEffect(() => {
+    console.log('=== NavBar Debug Info ===');
+    console.log('Raw userString from localStorage:', userString);
+    console.log('Parsed user object:', user);
+    console.log('User role:', user?.role);
+    console.log('User role type:', typeof user?.role);
+    console.log('isAuthenticated:', isAuthenticated);
+    console.log('isOrganizer (role === "Organizer"):', isOrganizer);
+    console.log('isAdmin (role === "Admin"):', isAdmin);
+    console.log('========================');
+  }, [userString, user?.role]);
 
   const handleSearch = (e) => {
     if (e.key === 'Enter' && searchQuery.trim() !== '') {
