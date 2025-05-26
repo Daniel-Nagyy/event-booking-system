@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import './EventAnalyticsPage.css'; // We'll create this CSS file next
 import { eventService } from '../services/api';
 
