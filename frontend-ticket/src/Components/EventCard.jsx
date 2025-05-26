@@ -11,9 +11,19 @@ function EventCard({ id, title, description, location, date, organizerId, onDele
     const user = userString ? JSON.parse(userString) : null;
     const isAdmin = user?.role === 'Admin';
     const isOrganizer = user?._id === organizerId;
+    const isUser = user?.role === 'User';
     
     // Show delete button only if user is admin or the organizer of this event
     const canDelete = isAdmin || isOrganizer;
+
+    // Determine the route based on user role
+    const getRouteDestination = () => {
+        if (isUser) {
+            return `/events/${id}`; // Route to event details/booking for regular users
+        } else {
+            return `/my-events/${id}/edit`; // Route to edit for organizers/admins
+        }
+    };
 
     const handleDelete = async (e) => {
         e.preventDefault();
@@ -35,7 +45,7 @@ function EventCard({ id, title, description, location, date, organizerId, onDele
 
     return (
         <div className="card">
-            <Link to={`/my-events/${id}/edit`} className="card-link-content">
+            <Link to={getRouteDestination()} className="card-link-content">
                 <img src={eventImage} alt={title} />
                 <div className="card__content">
                     <p className="card__title">{title}</p>

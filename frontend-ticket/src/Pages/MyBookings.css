@@ -2,13 +2,16 @@
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 1rem;
+    background-color: var(--primary-dark);
+    min-height: calc(100vh - 200px);
 }
 
 .bookings-container h1 {
-    color: #2c3e50;
+    color: var(--text-primary);
     font-size: 2.5rem;
     margin-bottom: 2rem;
     text-align: center;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .bookings-list {
@@ -18,29 +21,30 @@
 }
 
 .booking-card {
-    background-color: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: var(--card-bg);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--box-shadow);
     padding: 2rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    transition: transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
     margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
 }
 
 .booking-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.1);
 }
 
 .booking-card h2 {
-    color: #2c3e50;
+    color: var(--text-primary);
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
-    border-bottom: 2px solid #f0f0f0;
+    border-bottom: 2px solid var(--border-color);
     padding-bottom: 1rem;
 }
 
 .booking-details {
-    color: #4a5568;
+    color: var(--text-secondary);
 }
 
 .booking-details p {
@@ -53,11 +57,11 @@
 
 .booking-details p:last-of-type {
     font-weight: bold;
-    color: #2c3e50;
+    color: var(--text-primary);
     font-size: 1.2rem;
     margin-top: 1.5rem;
     padding-top: 1rem;
-    border-top: 2px solid #f0f0f0;
+    border-top: 2px solid var(--border-color);
 }
 
 .booking-actions {
@@ -69,11 +73,11 @@
 .booking-actions button {
     padding: 1rem 2rem;
     border: none;
-    border-radius: 8px;
+    border-radius: var(--button-border-radius);
     cursor: pointer;
     font-weight: 600;
     font-size: 1rem;
-    transition: all 0.3s ease;
+    transition: all var(--transition-speed) ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     width: 100%;
@@ -81,20 +85,20 @@
 }
 
 .cancel-button {
-    background-color: #f44336;
-    color: white;
-    box-shadow: 0 2px 4px rgba(244, 67, 54, 0.3);
+    background-color: var(--error-color);
+    color: var(--text-primary);
+    box-shadow: var(--box-shadow);
 }
 
 .cancel-button:hover {
-    background-color: #d32f2f;
+    background-color: var(--secondary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(244, 67, 54, 0.4);
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.2);
 }
 
 .success-message, .error-message {
     padding: 1rem 2rem;
-    border-radius: 8px;
+    border-radius: var(--card-border-radius);
     margin: 1rem 0;
     text-align: center;
     animation: fadeIn 0.3s ease-in;
@@ -102,13 +106,13 @@
 }
 
 .success-message {
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--success-color);
+    color: var(--text-primary);
 }
 
 .error-message {
-    background-color: #f44336;
-    color: white;
+    background-color: var(--error-color);
+    color: var(--text-primary);
 }
 
 @keyframes fadeIn {
@@ -118,18 +122,18 @@
 
 .no-bookings {
     text-align: center;
-    color: #4a5568;
+    color: var(--text-secondary);
     font-size: 1.2rem;
     padding: 2rem;
-    background-color: #f8f9fa;
-    border-radius: 10px;
+    background-color: var(--primary-light);
+    border-radius: var(--card-border-radius);
 }
 
 .bookings-loading {
     text-align: center;
     padding: 2rem;
     font-size: 1.2rem;
-    color: #4a5568;
+    color: var(--text-secondary);
 }
 
 .booking-status {
@@ -141,21 +145,21 @@
 }
 
 .status-pending {
-    background-color: #fff3cd;
-    color: #856404;
-    border: 1px solid #ffeeba;
+    background-color: var(--accent-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
 }
 
 .status-approved {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    background-color: var(--success-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
 }
 
 .status-cancelled {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background-color: var(--error-color);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
 }
 
 /* Responsive adjustments */
