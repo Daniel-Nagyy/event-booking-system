@@ -14,6 +14,7 @@ function EventForm() {
     const [date, setDate] = useState("");
     const [time, setTime] = useState("");
     const [totalTickets, setTotalTickets] = useState(0);
+    const [ticketPrice, setTicketPrice] = useState(0);
     const [image, setImage] = useState(null);
 
     const [loading, setLoading] = useState(false);
@@ -33,6 +34,7 @@ function EventForm() {
                     setDate(event.date ? new Date(event.date).toISOString().split('T')[0] : "");
                     setTime(event.time);
                     setTotalTickets(event.totalTickets);
+                    setTicketPrice(event.ticketPrice);
                     setLoading(false);
                 })
                 .catch(err => {
@@ -48,7 +50,7 @@ function EventForm() {
         setLoading(true);
         setError(null);
 
-        const eventData = { title, description, location, category, date, time, totalTickets };
+        const eventData = { title, description, location, category, date, time, totalTickets, ticketPrice };
 
         try {
             if (isEditing) {
@@ -62,6 +64,21 @@ function EventForm() {
             console.error("Error submitting event form:", err);
             setError(err.response?.data?.message || "Failed to save event.");
             setLoading(false);
+        }
+    };
+
+    // Handler for ticket price changes
+    const handleTicketPriceChange = (e) => {
+        const value = e.target.value;
+        console.log('Ticket price input value:', value); // Debug log
+        if (value === '' || value === null) {
+            setTicketPrice(0);
+        } else {
+            const numValue = parseFloat(value);
+            if (!isNaN(numValue)) {
+                setTicketPrice(numValue);
+                console.log('Updated ticket price to:', numValue); // Debug log
+            }
         }
     };
 
@@ -104,6 +121,25 @@ function EventForm() {
                     <div>
                         <label htmlFor="totalTickets">Total Tickets</label>
                         <input type="number" id="totalTickets" value={totalTickets} onChange={e => setTotalTickets(parseInt(e.target.value, 10))} required min="1" />
+                    </div>
+                    <div>
+                        <label htmlFor="ticketPrice">Ticket Price ($)</label>
+                        <input 
+                            type="number" 
+                            id="ticketPrice" 
+                            value={ticketPrice || ''} 
+                            onChange={handleTicketPriceChange}
+                            onBlur={(e) => {
+                                console.log('Ticket price on blur:', e.target.value);
+                                if (e.target.value === '') {
+                                    setTicketPrice(0);
+                                }
+                            }}
+                            required 
+                            min="0" 
+                            step="50"
+                            placeholder="0"
+                        />
                     </div>
                     <button type="submit" disabled={loading}>
                         {loading ? "Saving..." : (isEditing ? "Update Event" : "Create Event")}

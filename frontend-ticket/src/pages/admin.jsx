@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import UsersPage from './adminUser.jsx';
 import EventPage from './eventPage.jsx';
+import './admin.css';
 
 function Admin() {
   const location = useLocation();
