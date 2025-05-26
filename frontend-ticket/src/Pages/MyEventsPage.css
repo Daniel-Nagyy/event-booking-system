@@ -2,9 +2,9 @@
     padding: 32px;
     max-width: 1200px;
     margin: 0 auto;
-    background-color: #eeeeee;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--primary-light);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--box-shadow);
     margin-top: 40px;
 }
 
@@ -15,74 +15,69 @@
     align-items: center;
     margin-bottom: 32px;
     padding-bottom: 16px;
-    border-bottom: 1px solid #eaeaea; 
+    border-bottom: 1px solid var(--border-color);
 }
 
 /* Container for action buttons in the header */
 .page-header-actions {
     display: flex;
-    gap: 15px; /* Space between buttons */
+    gap: 15px;
 }
 
 .my-events-container h1 {
-    /* text-align: center; remove to align left */
-    margin-bottom: 0; /* Adjusted as padding-bottom is on page-header */
-    color: #333;
+    margin-bottom: 0;
+    color: var(--text-primary);
     font-size: 32px;
-    /* border-bottom: 1px solid #eaeaea; Moved to page-header */
-    /* padding-bottom: 16px; Moved to page-header */
 }
 
 /* Style for the Create New Event button */
 .create-event-button {
-    background: linear-gradient(135deg, #7b61ff, #5e45d8);
-    color: white;
+    background: var(--accent-color);
+    color: var(--text-primary);
     padding: 10px 20px;
-    border-radius: 8px;
+    border-radius: var(--button-border-radius);
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 15px rgba(123, 97, 255, 0.2);
+    transition: all var(--transition-speed) ease;
+    box-shadow: var(--box-shadow);
 }
 
 .create-event-button:hover {
-    background: linear-gradient(135deg, #6a50e0, #4d37c0);
-    box-shadow: 0 6px 20px rgba(123, 97, 255, 0.3);
+    background: var(--secondary-light);
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .create-event-button:active {
     transform: translateY(0);
-    box-shadow: 0 2px 10px rgba(123, 97, 255, 0.2);
 }
 
 /* Common style for header buttons */
 .page-header-button {
-    color: white;
+    color: var(--text-primary);
     padding: 10px 20px;
-    border-radius: 8px;
+    border-radius: var(--button-border-radius);
     text-decoration: none;
     font-size: 16px;
     font-weight: 500;
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    transition: all var(--transition-speed) ease;
 }
 
-/* Specific style for Analytics button - can use a different color */
+/* Specific style for Analytics button */
 .analytics-button {
-    background: linear-gradient(135deg, #11A6A6, #0D8282); /* Teal gradient */
-    box-shadow: 0 4px 15px rgba(17, 166, 166, 0.2);
+    background: var(--secondary-dark);
+    box-shadow: var(--box-shadow);
 }
 
 .analytics-button:hover {
-    background: linear-gradient(135deg, #0D8282, #0A6B6B);
-    box-shadow: 0 6px 20px rgba(17, 166, 166, 0.3);
+    background: var(--secondary-light);
     transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
 }
 
 .analytics-button:active {
     transform: translateY(0);
-    box-shadow: 0 2px 10px rgba(17, 166, 166, 0.2);
 }
 
 .events-grid {
@@ -96,14 +91,14 @@
     text-align: center;
     padding: 24px;
     font-size: 18px;
-    color: #666;
+    color: var(--text-secondary);
 }
 
 .error-message {
-    color: #d32f2f;
-    background-color: #ffebee;
+    color: var(--text-primary);
+    background-color: var(--error-color);
     padding: 16px;
-    border-radius: 8px;
+    border-radius: var(--card-border-radius);
     text-align: center;
     font-size: 18px;
     margin: 24px auto;
@@ -111,12 +106,12 @@
 }
 
 .no-events {
-    color: #757575;
+    color: var(--text-secondary);
     font-style: italic;
     text-align: center;
     padding: 24px;
     font-size: 18px;
-    background-color: #fafafa;
-    border-radius: 8px;
+    background-color: var(--primary-dark);
+    border-radius: var(--card-border-radius);
     margin: 24px 0;
 }

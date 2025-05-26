@@ -12,7 +12,8 @@ const eventController = {
   createEvent: async (req, res) => {
     const {
       title, description, location,
-      category, date, time, totalTickets
+      category, date, time, totalTickets,
+      price
     } = req.body;
 
     const organizerId = req.user._id;
@@ -33,6 +34,7 @@ const eventController = {
         date,
         time,
         totalTickets,
+        price,
         organizer: organizerId
       });
 
@@ -93,11 +95,11 @@ const eventController = {
     try {
       const eventId = req.params.id;
       const event = await eventModel.findById(eventId);
-
+  
       if (!event) {
         return res.status(404).json({ message: 'Event not found' });
       }
-
+  
       res.status(200).json(event);
     } catch (error) {
       console.error(error);
@@ -178,6 +180,29 @@ approveEvent: async (req, res) => {
     res.status(500).json({ message: "Error approving event" });
   }
 },
+declineEvent: async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    const event = await eventModel.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    if (event.status === "Cancelled") {
+      return res.status(400).json({ message: "Event is already Cancelled" });
+    }
+
+    event.status = "Cancelled";
+    await event.save();
+
+    res.status(200).json({ message: "Event declined successfully", event });
+  } catch (error) {
+    console.error("Error declining event:", error);
+    res.status(500).json({ message: "Error declining event" });
+  }
+}
+,
 getApprovedEvents: async (req, res) => {
   try {
     const approvedEvents = await eventModel.find({ status: "approved" });

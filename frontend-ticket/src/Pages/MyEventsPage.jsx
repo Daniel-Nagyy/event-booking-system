@@ -90,6 +90,7 @@ function MyEventsPage() {
                         description={event.description}
                         location={event.location}
                         date={new Date(event.date).toLocaleDateString()}
+                        organizerId={event.organizer}
                         onDelete={handleEventDeleted}
                     />
                 ))}

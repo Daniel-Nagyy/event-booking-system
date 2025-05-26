@@ -4,12 +4,10 @@ const eventsController = require('../Controllers/eventController');
 const userController = require("../Controllers/userController");
 const router = express.Router();
 const authorizationMiddleware = require("../Middleware/authorizationMiddleware");
-const authenticationMiddleware=require("../Middleware/authenticationMiddleware")
+const authenticationMiddleware = require("../Middleware/authenticationMiddleware");
 
-
-
-router.get("/",authorizationMiddleware('Admin'),userController.getAllUsers);
 // Specific routes FIRST
+router.get("/",authorizationMiddleware('Admin'),userController.getAllUsers);
 router.get("/bookings",bookingController.getUserBookings);
 router.get('/events',authorizationMiddleware('Organizer'),userController.getUserEvents);
 router.get('/events/analytics',authorizationMiddleware(['Admin','Organizer']),eventsController.getEventAnalysis);

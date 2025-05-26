@@ -3,8 +3,17 @@ import eventImage from '../elements/event-pic.jpeg';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function EventCard({ id, title, description, location, date, onDelete }) {
+function EventCard({ id, title, description, location, date, organizerId, onDelete }) {
     const navigate = useNavigate();
+
+    // Get current user from localStorage
+    const userString = localStorage.getItem('user');
+    const user = userString ? JSON.parse(userString) : null;
+    const isAdmin = user?.role === 'Admin';
+    const isOrganizer = user?._id === organizerId;
+    
+    // Show delete button only if user is admin or the organizer of this event
+    const canDelete = isAdmin || isOrganizer;
 
     const handleDelete = async (e) => {
         e.preventDefault();
@@ -35,9 +44,11 @@ function EventCard({ id, title, description, location, date, onDelete }) {
                     <p className="card__description">{date}</p>
                 </div>
             </Link>
-            <button onClick={handleDelete} className="delete-event-button">
-                Delete
-            </button>
+            {canDelete && (
+                <button onClick={handleDelete} className="delete-event-button">
+                    Delete
+                </button>
+            )}
         </div>
     );
 }
