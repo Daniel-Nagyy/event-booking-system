@@ -73,7 +73,7 @@ api.interceptors.response.use(
 export const authService = {
   login: (credentials) => api.post('/v1/login', credentials),
   register: (userData) => api.post('/auth/register', userData),
-  viewprofile:()=> api.get('v1/users/profile'),
+  viewprofile:()=> api.get('/v1/users/profile'),
   forgotPassword: (email) => api.post('/auth/forgot-password', { email })
 };
 
@@ -83,7 +83,7 @@ export const eventService = {
     getEventById: (id) => api.get(`/v1/events/${id}`),
     createEvent: (eventData) => api.post('/v1/events', eventData, { withCredentials: true }),
     updateEvent: (id, eventData) => api.put(`/v1/events/${id}`, eventData, { withCredentials: true }),
-    getApprovedEvents: () => api.get('v1/events'),
+    getApprovedEvents: () => api.get('/v1/events'),
     deleteEvent: (id) => api.delete(`/events/${id}`),
     getUserEvents: () => api.get('/v1/users/events', {
             withCredentials: true
@@ -95,21 +95,21 @@ export const eventService = {
 // Booking service endpoints
 export const bookingService = {
   createBooking: async (bookingData) => {
-    return await api.post('/bookings', bookingData);
+    return await api.post('/v1/bookings', bookingData);
   },
   getUserBookings: async () => {
-    return await api.get('/bookings/user');
+    return await api.get('/v1/bookings/user');
   },
   getBookingById: async (id) => {
-    return await api.get(`/bookings/${id}`);
+    return await api.get(`/v1/bookings/${id}`);
   },
   cancelBooking: async (bookingId) => {
     console.log('Cancelling booking:', bookingId);
-    return await api.put(`/bookings/${bookingId}/cancel`);
+    return await api.put(`/v1/bookings/${bookingId}/cancel`);
   },
   updateBooking: async (bookingId, updateData) => {
     console.log('Updating booking:', bookingId, 'with data:', updateData);
-    return await api.put(`/bookings/${bookingId}/update`, updateData);
+    return await api.put(`/v1/bookings/${bookingId}/update`, updateData);
   }
 };
 
@@ -123,8 +123,8 @@ export const admin={
 }
 
 export const profileService={
-  viewprofile:()=> api.get('v1/users/profile'),
-  editProfile:(dataToSend)=> api.put('v1/users/profile',dataToSend)
+  viewprofile:()=> api.get('/v1/users/profile'),
+  editProfile:(dataToSend)=> api.put('/v1/users/profile',dataToSend)
 };
 
 export default api;

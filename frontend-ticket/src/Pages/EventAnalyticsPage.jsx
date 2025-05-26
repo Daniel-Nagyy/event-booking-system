@@ -15,18 +15,19 @@ function EventAnalyticsPage() {
 
                 const response = await eventService.getEventsAnalytics();
                 
-                if (response.data && Array.isArray(response.data.analysis)) {
+                if (response.data && response.data.analysis && Array.isArray(response.data.analysis)) {
                     setAnalytics(response.data.analysis);
+                } else if (response.data && Array.isArray(response.data)) {
+                    setAnalytics(response.data);
                 } else {
                     setAnalytics([]);
                     console.warn("Analytics data received is not in the expected format:", response.data);
-                    // setError("Received unexpected data format for analytics.");
                 }
             } catch (err) {
                 console.error('Error fetching event analytics:', err);
                 if (err.response) {
                     if (err.response.status === 403) {
-                        setError('Access Denied: You do not have permission to view these analytics. (Admin access required)');
+                        setError('Access Denied: You do not have permission to view these analytics. (Admin or Organizer access required)');
                     } else if (err.response.status === 404) {
                         setError('No analytics data found. Ensure there are events to analyze.');
                     } else {
@@ -48,34 +49,48 @@ function EventAnalyticsPage() {
     }
 
     if (error) {
-        return <div className="analytics-error-message">{error}</div>;
+        return (
+            <div className="analytics-container">
+                <div className="analytics-error-message">{error}</div>
+                <button 
+                    onClick={() => window.location.reload()} 
+                    style={{marginTop: '10px', padding: '10px 20px', backgroundColor: '#6c757d', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer'}}
+                >
+                    Retry
+                </button>
+            </div>
+        );
     }
 
     return (
         <div className="analytics-container">
             <h1>Event Analytics</h1>
+
             {analytics.length === 0 && !error && (
                 <p className="no-analytics-data">No analytics data available at the moment.</p>
             )}
             {analytics.length > 0 && (
-                <table className="analytics-table">
-                    <thead>
-                        <tr>
-                            <th>Event Title</th>
-                            <th>Event ID</th>
-                            <th>Percentage Booked</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {analytics.map((event, index) => (
-                            <tr key={event.eventId || index}> {/* Fallback to index if eventId is missing */}
-                                <td>{event.title || 'N/A'}</td>
-                                <td>{event.eventId || 'N/A'}</td>
-                                <td>{event.percentageBooked !== undefined ? `${event.percentageBooked}%` : 'N/A'}</td>
+                <div>
+                    <p className="analytics-success-message">✅ Found {analytics.length} events with analytics data!</p>
+                    <table className="analytics-table">
+                        <thead>
+                            <tr>
+                                <th>Event Title</th>
+                                <th>Event ID</th>
+                                <th>Percentage Booked</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {analytics.map((event, index) => (
+                                <tr key={event.eventId || index}>
+                                    <td>{event.title || 'N/A'}</td>
+                                    <td>{event.eventId || 'N/A'}</td>
+                                    <td>{event.percentageBooked !== undefined ? `${event.percentageBooked}%` : 'N/A'}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
         </div>
     );
