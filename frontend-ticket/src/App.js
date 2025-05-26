@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import EventCard from './Components/EventCard';
 import MyEventsPage from './Pages/MyEventsPage';
-import EventForm from './Components/EventForm';
+import EventForm from './Pages/EventForm';
 import EventAnalyticsPage from './Pages/EventAnalyticsPage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
