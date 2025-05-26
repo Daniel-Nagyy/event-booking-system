@@ -1,16 +1,20 @@
 .card {
     position: relative;
-    width: 300px;
-    height: 200px;
+    width: 300px !important;
+    height: 200px !important;
+    min-height: 200px !important;
+    max-height: none !important;
     background-color: var(--primary-light);
     border-radius: var(--card-border-radius);
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     perspective: 1000px;
     box-shadow: var(--box-shadow);
     transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    flex-shrink: 0;
+    border: 3px solid red !important;
   }
   
   .card img {
@@ -36,7 +40,7 @@
     height: 100%;
     padding: 20px;
     box-sizing: border-box;
-    background-color: rgba(45, 45, 45, 0.95);
+    background-color: rgba(45, 45, 45, 0.85);
     transform: rotateX(-90deg);
     transform-origin: bottom;
     transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -55,6 +59,7 @@
     font-size: 24px;
     color: var(--text-primary);
     font-weight: 700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   }
   
   .card__description {
@@ -62,10 +67,12 @@
     font-size: 14px;
     color: var(--text-secondary);
     line-height: 1.4;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
   }
   
   .card:hover img {
-    scale: 0;
+    transform: scale(1.1);
+    filter: brightness(0.3) blur(1px);
   }
   
   /* Styles for the content area when card is a div */
