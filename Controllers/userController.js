@@ -7,6 +7,7 @@ require("dotenv").config();
 const secretKey = process.env.secretkey;
 //for forgot password
 const nodemailer = require("nodemailer");
+const mongoose = require("mongoose");
 
 const otpStore = new Map(); // Store: email -> { otp, hashedPassword, expiresAt }
 
@@ -133,6 +134,52 @@ const userController = {
     catch (error)
     {
       return res.status(500).json({message: error.message});
+    }
+  },
+
+  adminUpdateUser: async (req, res) => {
+    try {
+      const userId = req.params.id;
+      
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        return res.status(400).json({ message: "Invalid user ID" });
+      }
+
+      const allowedFields = ["name", "email", "role"];
+      const updateData = {};
+      
+      allowedFields.forEach((field) => {
+        if (req.body[field] !== undefined) {
+          updateData[field] = req.body[field];
+        }
+      });
+
+      // If password is provided, hash it
+      if (req.body.password) {
+        const hashPassword = await bcrypt.hash(req.body.password, 10);
+        updateData.password = hashPassword;
+      }
+
+      const updatedUser = await userModel.findByIdAndUpdate(
+        userId,
+        { $set: updateData },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        return res.status(404).json({ message: "User not found" });
+      }
+
+      // Remove password from response
+      const { password, ...userWithoutPassword } = updatedUser.toObject();
+      
+      res.status(200).json({ 
+        message: "User updated successfully", 
+        user: userWithoutPassword 
+      });
+    } catch (error) {
+      console.error("Error updating user:", error);
+      res.status(500).json({ message: "Error updating user", error: error.message });
     }
   },
 
@@ -269,6 +316,40 @@ updateRole: async (req, res) => {
     return res.status(200).json({ message: "Role Updated Successfully", user });
   } catch (err) {
     return res.status(500).json({ message: err.message });
+  }
+},
+
+createUser: async (req, res) => {
+  try {
+    const { name, email, password, role } = req.body;
+    
+    // Validate required fields
+    if (!name || !email || !password || !role) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Check if user already exists
+    const existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: "User already exists" });
+    }
+
+    // Hash password
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    const newUser = new userModel({
+      name,
+      email,
+      password: hashPassword,
+      role,
+    });
+
+    await newUser.save();
+    res.status(201).json({ message: "User created successfully", user: newUser });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({ message: "Error creating user" });
   }
 }
 

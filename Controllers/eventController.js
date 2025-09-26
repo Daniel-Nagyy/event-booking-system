@@ -49,6 +49,17 @@ const eventController = {
   deleteEvent: async (req, res) => {
     const eventId = req.params.id;
     try {
+      // Enforce ownership: organizers can only delete their own events
+      if (req.user && req.user.role === 'Organizer') {
+        const existingEvent = await eventModel.findById(eventId).select('organizer');
+        if (!existingEvent) {
+          return res.status(404).json({ message: 'Event not found' });
+        }
+        if (String(existingEvent.organizer) !== String(req.user._id)) {
+          return res.status(403).json({ message: 'You are not allowed to delete this event' });
+        }
+      }
+
       const deletedEvent = await eventModel.findByIdAndDelete(eventId);
       if (!deletedEvent) {
         return res.status(404).json({ message: 'Event not found' });
@@ -110,18 +121,34 @@ const eventController = {
   updateEvent: async (req, res) => {
     try {
       const eventId = req.params.id;
+      console.log('Update event request for ID:', eventId);
+      console.log('Request body:', req.body);
+      console.log('User making request:', req.user);
 
       if (!mongoose.Types.ObjectId.isValid(eventId)) {
         return res.status(400).json({ message: "Invalid event ID" });
       }
 
-      const allowedFields = ["title", "description", "date", "time", "location", "category", "totalTickets"];
+      // Enforce ownership: organizers can only update their own events
+      if (req.user && req.user.role === 'Organizer') {
+        const existingEvent = await eventModel.findById(eventId).select('organizer');
+        if (!existingEvent) {
+          return res.status(404).json({ message: "Event not found" });
+        }
+        if (String(existingEvent.organizer) !== String(req.user._id)) {
+          return res.status(403).json({ message: "You are not allowed to modify this event" });
+        }
+      }
+
+      const allowedFields = ["title", "description", "date", "time", "location", "category", "totalTickets", "price"];
       const updateData = {};
       allowedFields.forEach((field) => {
         if (req.body[field] !== undefined) {
           updateData[field] = req.body[field];
         }
       });
+
+      console.log('Filtered update data:', updateData);
 
       const updatedEvent = await eventModel.findByIdAndUpdate(
         eventId,
@@ -133,6 +160,7 @@ const eventController = {
         return res.status(404).json({ message: "Event not found" });
       }
 
+      console.log('Event updated successfully:', updatedEvent);
       res.status(200).json(updatedEvent);
     } catch (error) {
       console.error("Error updating event:", error);

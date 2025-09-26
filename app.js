@@ -17,10 +17,7 @@ const authrizationMiddleware = require("./Middleware/authorizationMiddleware");
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors({
-  origin: 'http://localhost:5173', // Your frontend URL
-  credentials: true
-}));
+
 
 app.use(cookieParser())
 
@@ -43,11 +40,8 @@ app.use("/api/v1/bookings", bookingRoutes);
 app.use("/api/v1/events", eventRoutes);
 app.use("/api/v1/users", userRoutes);
 
-const db_name = process.env.DB_NAME;
-const db_url = `${process.env.DB_URL}/${db_name}`; // if it gives error try to change the localhost to 127.0.0.1
-
 mongoose
-  .connect(db_url)
+  .connect(process.env.MONGODB_URI)
   .then(() => console.log("MongoDB connected"))
   .catch((e) => {
     console.log(e);
@@ -63,7 +57,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({ message: 'Something went wrong!' });
 });
 
-app.listen(process.env.PORT, () => console.log("server started"));
+app.listen(process.env.PORT || 3000, () => console.log(`Server started on port ${process.env.PORT || 3000}`));
 
 module.exports = app;
 

@@ -61,7 +61,25 @@ function Events() {
 
     return (
         <div className="events-container">
-            <h1 className="events-title">Upcoming Events</h1>
+            <section className="events-hero">
+                <h1>Discover and book tickets for the best events</h1>
+                <p>Concerts, sports, festivals, and more near you</p>
+                <div className="events-search">
+                    <input
+                        type="text"
+                        placeholder="Search for events, artists, or venues"
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                const value = e.currentTarget.value.trim();
+                                if (value) navigate(`/events?search=${encodeURIComponent(value)}`);
+                            }
+                        }}
+                    />
+                    <button onClick={() => navigate('/events')}>Search</button>
+                </div>
+            </section>
+            <section className="events-section">
+            <h2 className="events-title">Upcoming Events</h2>
             <div className="events-grid">
                 {filteredEvents.map((event) => (
                     <EventCard
@@ -72,9 +90,11 @@ function Events() {
                         location={event.location}
                         date={new Date(event.date).toLocaleDateString()}
                         organizerId={event.organizer}
+                        price={event.price}
                     />
                 ))}
             </div>
+            </section>
         </div>
     );
 }

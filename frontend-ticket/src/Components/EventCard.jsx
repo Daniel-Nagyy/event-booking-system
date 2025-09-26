@@ -3,26 +3,25 @@ import eventImage from '../elements/event-pic.jpeg';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function EventCard({ id, title, description, location, date, organizerId, onDelete }) {
+function EventCard({ id, title, description, location, date, organizerId, price, onDelete }) {
     const navigate = useNavigate();
 
     // Get current user from localStorage
     const userString = localStorage.getItem('user');
     const user = userString ? JSON.parse(userString) : null;
     const isAdmin = user?.role === 'Admin';
-    const isOrganizer = user?._id === organizerId;
+    const isOwner = user?._id && organizerId ? String(user._id) === String(organizerId) : false;
     const isUser = user?.role === 'User';
     
     // Show delete button only if user is admin or the organizer of this event
-    const canDelete = isAdmin || isOrganizer;
+    const canDelete = isAdmin || isOwner;
 
     // Determine the route based on user role
     const getRouteDestination = () => {
-        if (isUser) {
-            return `/events/${id}`; // Route to event details/booking for regular users
-        } else {
-            return `/my-events/${id}/edit`; // Route to edit for organizers/admins
+        if (isAdmin || isOwner) {
+            return `/my-events/${id}/edit`; // Only admin or the event owner can edit
         }
+        return `/events/${id}`; // Others see event details
     };
 
     const handleDelete = async (e) => {
@@ -49,9 +48,8 @@ function EventCard({ id, title, description, location, date, organizerId, onDele
                 <img src={eventImage} alt={title} />
                 <div className="card__content">
                     <p className="card__title">{title}</p>
-                    <p className="card__description">{description}</p>
-                    <p className="card__description">{location}</p>
-                    <p className="card__description">{date}</p>
+                    <p className="card__description">{location} • {date}</p>
+                    <p className="card__price">{typeof price === 'number' ? `$${price.toFixed(2)}` : ''}</p>
                 </div>
             </Link>
             {canDelete && (

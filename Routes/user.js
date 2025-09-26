@@ -8,6 +8,8 @@ const authenticationMiddleware = require("../Middleware/authenticationMiddleware
 
 // Specific routes FIRST
 router.get("/",authorizationMiddleware('Admin'),userController.getAllUsers);
+router.post("/",authorizationMiddleware('Admin'),userController.createUser);
+router.put("/:id",authorizationMiddleware('Admin'),userController.adminUpdateUser);
 router.get("/bookings",bookingController.getUserBookings);
 router.get('/events',authorizationMiddleware('Organizer'),userController.getUserEvents);
 router.get('/events/analytics',authorizationMiddleware(['Admin','Organizer']),eventsController.getEventAnalysis);

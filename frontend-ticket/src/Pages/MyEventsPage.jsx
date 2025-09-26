@@ -63,6 +63,11 @@ function MyEventsPage() {
             <div className="my-events-container">
                 <h1>My Events</h1>
                 <p className="no-events">You haven't created any events yet.</p>
+                <div className="page-header-actions">
+                    <Link to="/my-events/new" className="create-event-button">
+                        Create New Event
+                    </Link>
+                </div>
             </div>
         );
     }

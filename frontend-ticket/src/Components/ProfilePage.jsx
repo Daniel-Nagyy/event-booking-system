@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api, { authService } from "../services/api";
 import { profileService } from "../services/api"; // Import authService
 
 function ProfilePage() {
@@ -9,6 +10,19 @@ function ProfilePage() {
 
   const goToEditProfile = () => {
     navigate("/profile/edit");
+  };
+
+  const handleLogout = async () => {
+    try {
+      // If there is a logout endpoint in backend, call it (optional)
+      // await authService.logout?.();
+    } catch (e) {
+      // ignore network/logout endpoint errors, proceed to clear client state
+    } finally {
+      localStorage.removeItem('user');
+      // Hard redirect to clear any in-memory state and interceptors
+      window.location.href = '/login';
+    }
   };
 
   useEffect(() => {
@@ -243,6 +257,12 @@ function ProfilePage() {
                 onClick={goToEditProfile}
               >
                 Edit Profile
+              </button>
+              <button
+                style={styles.secondaryButton}
+                onClick={handleLogout}
+              >
+                Log out
               </button>
             </div>
           </div>

@@ -1,24 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
 :root {
-  /* Dark Grey Matte Color Palette */
-  --primary-dark: #1a1a1a;     /* Main background */
-  --primary-light: #2d2d2d;    /* Card/Container background */
-  --secondary-dark: #363636;   /* Hover states */
-  --secondary-light: #404040;  /* Active states */
-  --accent-color: #666666;     /* Accent elements */
-  --text-primary: #ffffff;     /* Primary text */
-  --text-secondary: #b0b0b0;   /* Secondary text */
-  --text-muted: #808080;       /* Muted text */
-  --border-color: #404040;     /* Borders */
-  --success-color: #2d5a27;    /* Success states */
-  --error-color: #5a2727;      /* Error states */
-  --warning-color: #5a4c27;    /* Warning states */
-  
+  /* Brand Palette */
+  --brand-primary: #7C3AED;
+  --brand-secondary: #1F2937;
+  --brand-accent: #F59E0B;
+  --brand-success: #10B981;
+  --brand-background: #F9FAFB;
+
+  /* Derived tokens */
+  --primary-dark: var(--brand-secondary);
+  --primary-light: #ffffff;
+  --secondary-dark: rgba(31, 41, 55, 0.08);
+  --secondary-light: rgba(124, 58, 237, 0.12);
+  --accent-color: var(--brand-primary);
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --text-muted: #6B7280;
+  --border-color: #E5E7EB;
+  --success-color: var(--brand-success);
+  --error-color: #EF4444;
+  --warning-color: #F59E0B;
+
   /* Common styles */
-  --card-border-radius: 8px;
-  --button-border-radius: 6px;
-  --input-border-radius: 6px;
-  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  --transition-speed: 0.2s;
+  --card-border-radius: 14px;
+  --button-border-radius: 10px;
+  --input-border-radius: 10px;
+  --box-shadow: 0 10px 25px rgba(17, 24, 39, 0.08);
+  --transition-speed: 0.25s;
+  --card-bg: #ffffff;
 }
 
 * {
@@ -26,9 +36,9 @@
 }
 
 body {
-  background-color: var(--primary-dark);
+  background-color: var(--brand-background);
   color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   margin: 0;
   padding: 0;
   line-height: 1.6;
@@ -36,8 +46,8 @@ body {
 
 /* Global button styles */
 button {
-  background-color: var(--accent-color);
-  color: var(--text-primary);
+  background: linear-gradient(135deg, var(--brand-primary), #9D6CFF);
+  color: #ffffff;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: var(--button-border-radius);
@@ -47,8 +57,8 @@ button {
 }
 
 button:hover {
-  background-color: var(--secondary-light);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  filter: brightness(1.05);
 }
 
 button:active {
@@ -63,7 +73,7 @@ button:disabled {
 
 /* Global input styles */
 input, textarea, select {
-  background-color: var(--primary-dark);
+  background-color: #ffffff;
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   padding: 0.75rem 1rem;
@@ -84,7 +94,7 @@ input::placeholder, textarea::placeholder {
 
 /* Global link styles */
 a {
-  color: var(--text-primary);
+  color: var(--brand-primary);
   text-decoration: none;
   transition: color var(--transition-speed) ease;
 }
@@ -95,7 +105,7 @@ a:hover {
 
 /* Global card styles */
 .card {
-  background-color: var(--primary-light);
+  background-color: #ffffff;
   border-radius: var(--card-border-radius);
   box-shadow: var(--box-shadow);
   padding: 1.5rem;

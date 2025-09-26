@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create an axios instance with custom config
 const api = axios.create({
-  baseURL: 'http://localhost:3001/api',// el port el ana sha8al 3aleh
+  baseURL: '/api',// el port el ana sha8al 3aleh
   headers: {
     'Content-Type': 'application/json'
   },
@@ -12,12 +12,18 @@ const api = axios.create({
 // Add request interceptor to include auth token
 api.interceptors.request.use(
   (config) => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      const token = JSON.parse(user).token;
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+    const userString = localStorage.getItem('user');
+    let token;
+    try {
+      if (userString && userString !== "undefined") {
+        const userObj = JSON.parse(userString);
+        token = userObj.token;
       }
+    } catch (e) {
+      token = undefined;
+    }
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
@@ -72,9 +78,9 @@ api.interceptors.response.use(
 // Auth service endpoints
 export const authService = {
   login: (credentials) => api.post('/v1/login', credentials),
-  register: (userData) => api.post('/auth/register', userData),
+  register: (userData) => api.post('/v1/register', userData),
   viewprofile:()=> api.get('/v1/users/profile'),
-  forgotPassword: (email) => api.post('/auth/forgot-password', { email })
+  forgotPassword: (email, newPassword, otp) => api.put('/v1/forgot-password', { email })
 };
 
 // Events service endpoints
@@ -119,7 +125,11 @@ export const admin={
   approveEvents:(id) => api.patch(`/v1/events/approveevent/${id}`),
   declineEvents:(id) => api.patch(`/v1/events/decline/${id}`),
   updateRole:(id,role) =>api.put(`/v1/users/${id}`,{role}),
-  deleteUser:(id) => api.delete(`/v1/users/${id}`)
+  deleteUser:(id) => api.delete(`/v1/users/${id}`),
+  createUser:(userData) => api.post('/v1/users', userData),
+  updateEvent:(id, eventData) => api.put(`/v1/events/${id}`, eventData, { withCredentials: true }),
+  updateUser:(id, userData) => api.put(`/v1/users/${id}`, userData, { withCredentials: true }),
+  deleteEvent:(id) => api.delete(`/v1/events/${id}`, { withCredentials: true })
 }
 
 export const profileService={

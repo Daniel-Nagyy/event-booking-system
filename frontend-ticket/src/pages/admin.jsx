@@ -1,49 +1,109 @@
-import React from 'react';
-import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
-import UsersPage from './adminUser.jsx';
-import EventPage from './eventPage.jsx';
+import React, { useState } from 'react';
+import { FaTachometerAlt, FaUsers, FaCalendarAlt, FaChartBar, FaSignOutAlt } from 'react-icons/fa';
+import DashboardPage from './adminDashboard';
+import UsersPage from './adminUser';
+import EventPage from './eventPage';
+import EventAnalyticsPage from './EventAnalyticsPage';
 import './admin.css';
 
-function Admin() {
-  const location = useLocation();
-  const path = location.pathname;
-  const navigate = useNavigate();
-  const height =
-    path === '/admin/user' ? '120vh' :
-    (path === '/admin' || path === '/admin/event') ? '100vh' :
-    'auto'; // fallback
-  return (
-    <div
-      style={{  
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center', // vertical centering
-        alignItems: 'center',     // horizontal centering
-        height,        // full viewport height
-        textAlign: 'center',      // center text inside children
-        gap: '20px',              // spacing between buttons and heading
-      }}
-    >
-      <h1>Admin Menu</h1>
+export default function AdminPage() {
+  const [currentPage, setCurrentPage] = useState('dashboard');
 
-      <Routes>
-        {/* Main menu with buttons */}
-        <Route
-          path="/"
-          element={
-            <div>
-              <button onClick={() => navigate('/admin/user')}>Users</button>
-              <button onClick={() => navigate('/admin/event')}>Events</button>
-            </div>
-          }
-        />
-        {/* Users page */}
-        <Route path="user" element={<UsersPage />} />
-        {/* Events page */}
-        <Route path="event" element={<EventPage />} />
-      </Routes>
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    window.location.href = '/login';
+  };
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'dashboard':
+        return <DashboardPage onNavigate={setCurrentPage} />;
+      case 'users':
+        return <UsersPage />;
+      case 'events':
+        return <EventPage />;
+      case 'analytics':
+        return <EventAnalyticsPage />;
+      default:
+        return <DashboardPage onNavigate={setCurrentPage} />;
+    }
+  };
+
+  const getPageTitle = () => {
+    switch (currentPage) {
+      case 'dashboard':
+        return 'Dashboard';
+      case 'users':
+        return 'User Management';
+      case 'events':
+        return 'Event Management';
+      case 'analytics':
+        return 'Event Analytics';
+      default:
+        return 'Dashboard';
+    }
+  };
+
+  return (
+    <div className="admin-layout">
+      {/* Sidebar */}
+      <div className="admin-sidebar">
+        <div className="sidebar-header">
+          <h2>Admin Panel</h2>
+        </div>
+        
+        <nav className="sidebar-nav">
+          <button
+            className={`nav-item ${currentPage === 'dashboard' ? 'active' : ''}`}
+            onClick={() => setCurrentPage('dashboard')}
+          >
+            <FaTachometerAlt />
+            Dashboard
+          </button>
+          
+          <button
+            className={`nav-item ${currentPage === 'users' ? 'active' : ''}`}
+            onClick={() => setCurrentPage('users')}
+          >
+            <FaUsers />
+            Users
+          </button>
+          
+          <button
+            className={`nav-item ${currentPage === 'events' ? 'active' : ''}`}
+            onClick={() => setCurrentPage('events')}
+          >
+            <FaCalendarAlt />
+            Events
+          </button>
+          
+          <button
+            className={`nav-item ${currentPage === 'analytics' ? 'active' : ''}`}
+            onClick={() => setCurrentPage('analytics')}
+          >
+            <FaChartBar />
+            Analytics
+          </button>
+        </nav>
+        
+        <div className="sidebar-footer">
+          <button className="nav-item logout-btn" onClick={handleLogout}>
+            <FaSignOutAlt />
+            Logout
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="admin-main">
+        <div className="admin-header">
+          <h1>{getPageTitle()}</h1>
+        </div>
+        
+        <div className="admin-content">
+          {renderPage()}
+        </div>
+      </div>
     </div>
   );
 }
-
-export default Admin;

@@ -43,6 +43,16 @@ function EventDetails() {
 
     console.log('Rendering event details with event:', event);
 
+    // Determine if current user can book (only regular users)
+    const userString = localStorage.getItem('user');
+    let canBook = false;
+    try {
+        const currentUser = userString ? JSON.parse(userString) : null;
+        canBook = currentUser?.role === 'User';
+    } catch (e) {
+        canBook = false;
+    }
+
     return (
         <div className="event-details-container">
             <div className="event-details-content">
@@ -62,14 +72,16 @@ function EventDetails() {
                         <p>{event.description}</p>
                     </div>
 
-                    <div className="event-booking">
-                        {console.log('Rendering BookingForm with props:', { eventId: event._id, eventTitle: event.title, pricePerTicket: event.price })}
-                        <BookingForm 
-                            eventId={event._id} 
-                            eventTitle={event.title} 
-                            pricePerTicket={event.price}
-                        />
-                    </div>
+                    {canBook && (
+                        <div className="event-booking">
+                            {console.log('Rendering BookingForm with props:', { eventId: event._id, eventTitle: event.title, pricePerTicket: event.price })}
+                            <BookingForm 
+                                eventId={event._id} 
+                                eventTitle={event.title} 
+                                pricePerTicket={event.price}
+                            />
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
