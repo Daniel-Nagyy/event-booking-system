@@ -1,218 +1,107 @@
-/* Events.css */
-
-/* Main container */
 .events-container {
-    min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 0;
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: calc(100vh - 200px);
 }
 
-/* Hero section */
 .events-hero {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
-                url('https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80');
-    background-size: cover;
-    background-position: center;
-    color: white;
-    text-align: center;
-    padding: 120px 20px 80px;
-    margin-bottom: 60px;
+    position: relative;
+    padding: 5rem 2rem 3rem 2rem;
+    border-radius: 18px;
+    margin: 2rem;
+    background: radial-gradient(1200px 500px at 10% -10%, rgba(124,58,237,0.25), transparent 60%),
+                linear-gradient(135deg, #7C3AED 0%, #9D6CFF 50%, #7C3AED 100%);
+    color: #fff;
+    overflow: hidden;
 }
 
 .events-hero h1 {
-    font-size: 3.5rem;
+    font-size: 3rem;
+    line-height: 1.2;
+    margin: 0 0 1rem 0;
     font-weight: 700;
-    margin-bottom: 20px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .events-hero p {
-    font-size: 1.3rem;
-    margin-bottom: 40px;
-    opacity: 0.9;
-    font-weight: 300;
+    color: rgba(255,255,255,0.9);
+    margin: 0 0 2rem 0;
 }
 
-/* Search section */
 .events-search {
     display: flex;
-    max-width: 600px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 50px;
-    padding: 8px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    gap: 0.75rem;
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.5rem;
+    max-width: 640px;
+    box-shadow: var(--box-shadow);
 }
 
 .events-search input {
     flex: 1;
     border: none;
     outline: none;
-    padding: 15px 25px;
-    font-size: 1.1rem;
-    border-radius: 50px;
     background: transparent;
 }
 
-.events-search button {
-    background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    border-radius: 50px;
-    font-size: 1.1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
-}
-
-.events-search button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
-}
-
-/* Events section */
 .events-section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 20px 60px;
+    padding: 2rem;
 }
 
 .events-title {
-    text-align: center;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: white;
-    margin-bottom: 40px;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    color: var(--text-primary);
+    margin: 0 0 1rem 0;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
-/* Events grid */
 .events-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
-}
-
-/* Loading and error states */
-.events-loading, .events-error {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 50vh;
-    font-size: 1.5rem;
-    color: white;
-    text-align: center;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2.5rem;
+    justify-items: center;
+    padding: 1rem 0;
+    align-items: start;
 }
 
 .events-loading {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    text-align: center;
+    font-size: 1.5rem;
+    color: var(--text-secondary);
+    margin-top: 3rem;
+    padding: 2rem;
+    background-color: var(--primary-light);
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--box-shadow);
 }
 
 .events-error {
-    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-    padding: 40px;
-    border-radius: 15px;
-    margin: 40px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    color: var(--text-primary);
+    background-color: var(--error-color);
+    font-size: 1.3rem;
+    margin-top: 3rem;
+    padding: 1.5rem;
+    border-radius: var(--card-border-radius);
+    box-shadow: var(--box-shadow);
 }
 
-/* Responsive design */
+/* Responsive adjustments */
 @media (max-width: 768px) {
-    .events-hero {
-        padding: 80px 20px 60px;
+    .events-container {
+        padding: 1.5rem;
     }
-    
-    .events-hero h1 {
-        font-size: 2.5rem;
-    }
-    
-    .events-hero p {
-        font-size: 1.1rem;
-    }
-    
-    .events-search {
-        flex-direction: column;
-        border-radius: 20px;
-        gap: 10px;
-    }
-    
-    .events-search input,
-    .events-search button {
-        border-radius: 15px;
-        width: 100%;
-    }
-    
-    .events-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-    
+
     .events-title {
-        font-size: 2rem;
+        font-size: 2.2rem;
+        margin-bottom: 2rem;
     }
-}
 
-@media (max-width: 480px) {
-    .events-hero h1 {
-        font-size: 2rem;
-    }
-    
-    .events-hero p {
-        font-size: 1rem;
-    }
-    
-    .events-section {
-        padding: 0 15px 40px;
-    }
-    
     .events-grid {
         grid-template-columns: 1fr;
-        gap: 15px;
+        gap: 1.5rem;
+        padding: 0.5rem;
     }
-}
-
-/* Animation for card entrance */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.events-grid > * {
-    animation: fadeInUp 0.6s ease forwards;
-}
-
-/* Hover effects for better interactivity */
-.events-search input:focus {
-    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.3);
-}
-
-/* Scroll behavior */
-html {
-    scroll-behavior: smooth;
-}
-
-/* Custom scrollbar for webkit browsers */
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-    background: linear-gradient(45deg, #667eea, #764ba2);
-    border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(45deg, #5a6fd8, #6a4190);
-}
+} 
