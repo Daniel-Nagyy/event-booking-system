@@ -49,27 +49,37 @@ Follow these steps to run the project locally:
 
 
 1️⃣ Clone the repository
+
 git clone https://github.com/Daniel-Nagyy/event-booking-system.git
 
 2️⃣ Install dependencies
+
 npm install
 
 3️⃣ Start the backend server
+
 npm start
 
 4️⃣ Move to frontend directory
+
 cd frontend
 
 5️⃣ Run the frontend
+
 npm run dev
 
 💡 Key Features
 
 ✅ Secure JWT-based authentication
+
 ✅ Role-based access control (User / Organizer / Admin)
+
 ✅ Real-time ticket availability tracking
+
 ✅ Chatbot for quick inquiries
+
 ✅ QR Code ticket verification for event organizers
+
 ✅ Clean and responsive UI using Tailwind CSS
 
 📄 License
