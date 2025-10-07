@@ -43,32 +43,15 @@ The system supports **three distinct user roles** — User, Organizer, and Admin
 
 ---
 
-## 🚀 Getting Started
+## 🛠️ Installation & Setup:
 
-Follow these steps to run the project locally:
-
-
-1️⃣ Clone the repository
-
-git clone https://github.com/Daniel-Nagyy/event-booking-system.git
-
-2️⃣ Install dependencies
-
-npm install
-
-3️⃣ Start the backend server
-
-npm start
-
-4️⃣ Move to frontend directory
-
-cd frontend
-
-5️⃣ Run the frontend
-
-npm run dev
-
----
+1. Clone the repository and install dependencies:
+   ```bash
+   git clone https://github.com/Daniel-Nagyy/event-booking-system.git
+   npm i
+   npm start
+   cd frontend
+   npm run dev
 
 ### 💡 Key Features
 
@@ -85,17 +68,7 @@ npm run dev
 ✅ Clean and responsive UI using Tailwind CSS
 
 
-## 📄 License
-
-This project is licensed under the MIT License – see the LICENSE
- file for details.
- 
-
-### 👨‍💻 Author
-
-Developed by Daniel Nagy
-📧 For inquiries, reach out danielnagyy@hotmail.com
-
+---
 
 ### Screenshots
 
@@ -109,6 +82,18 @@ Developed by Daniel Nagy
 <img width="1919" height="867" alt="image" src="https://github.com/user-attachments/assets/31e6390c-c8c2-47d3-924a-bb05cc5cba1f" />
 <img width="1919" height="865" alt="image" src="https://github.com/user-attachments/assets/4c69f0bc-6ded-4d0e-bda5-bc1c04ad18b9" />
 
+---
+
+## 📄 License
+
+This project is licensed under the MIT License – see the LICENSE
+ file for details.
+ 
+
+### 👨‍💻 Author
+
+Developed by Daniel Nagy
+📧 For inquiries, reach out danielnagyy@hotmail.com
 
 
 
