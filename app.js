@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const path = require('path');
 require('dotenv').config();
 
 const User = require("./Models/user");
@@ -12,33 +13,41 @@ const authRoutes = require("./Routes/auth");
 const bookingRoutes = require("./Routes/booking");
 const authenticationMiddleware = require('./Middleware/authenticationMiddleware');
 const authrizationMiddleware = require("./Middleware/authorizationMiddleware");
+const contactRoutes = require('./Routes/contact');
+const chatbotRoutes = require('./Routes/chatbot');
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-
-app.use(cookieParser())
-
 app.use(
   cors({
     origin: process.env.ORIGIN, 
-    methods: ["GET", "POST", "DELETE", "PUT","PATCH"],
+    methods: ["GET", "POST", "DELETE", "PUT", "PATCH"],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization']
   })
 );
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+// PUBLIC ROUTES (No authentication required)
 app.use("/api/v1", authRoutes);
 
+// PUBLIC EVENT ROUTES - Move this BEFORE authentication middleware
+app.get("/api/v1/events", async (req, res, next) => {
+  const eventController = require("./Controllers/eventController");
+  return eventController.getApprovedEvents(req, res);
+});
+app.use('/api/v1/contact', contactRoutes);
 
-//to check if the user is authrized 
+// PROTECTED ROUTES (Authentication required)
 app.use(authenticationMiddleware);
 
-//to get the user booking
-app.use("/api/v1/bookings", bookingRoutes);
 app.use("/api/v1/events", eventRoutes);
+app.use("/api/v1/bookings", bookingRoutes); // Other event routes (create, update, delete)
 app.use("/api/v1/users", userRoutes);
+app.use('/api/v1/chatbot', chatbotRoutes);
 
 mongoose
   .connect(process.env.MONGODB_URI)
@@ -60,4 +69,3 @@ app.use((err, req, res, next) => {
 app.listen(process.env.PORT || 3000, () => console.log(`Server started on port ${process.env.PORT || 3000}`));
 
 module.exports = app;
-

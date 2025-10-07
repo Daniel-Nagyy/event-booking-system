@@ -1,20 +1,34 @@
-const express = require("express");
-const bookingController = require("../Controllers/bookingController");
+const express = require('express');
 const router = express.Router();
-const authorizationMiddleware = require("../Middleware/authorizationMiddleware");
-const authenticationMiddleware = require("../Middleware/authenticationMiddleware");
+const bookingController = require('../Controllers/bookingController');
+const  authenticationMiddleware  = require('../Middleware/authenticationMiddleware');
+const authorizationMiddleware = require('../Middleware/authorizationMiddleware');
 
-// Apply authentication middleware to all routes
-router.use(authenticationMiddleware);
+console.log('🔍 bookingController functions:', Object.keys(bookingController));
 
-// Booking routes
-router.get("/user", bookingController.getUserBookings);
-router.post("/", bookingController.createBooking);
-router.get("/:id", bookingController.getBookingById);
-router.delete("/:id", authorizationMiddleware('User'), bookingController.deleteBooking);
-router.put("/:id/cancel", bookingController.cancelBooking);
-router.put("/:id/update", bookingController.updateBooking);
+// Get user's bookings
+router.get('/user', authenticationMiddleware, bookingController.getUserBookings);
+
+// Create booking (Users only)
+router.post('/', authenticationMiddleware, authorizationMiddleware(['User']), bookingController.createBooking);
+
+// Get single booking
+router.get('/:id', authenticationMiddleware, bookingController.getBookingById);
+
+// Mark booking as attended
+router.put('/:id/attended', authenticationMiddleware, bookingController.markAsAttended);
+
+// Cancel booking
+router.put('/:id/cancel', authenticationMiddleware, bookingController.cancelBooking);
+
+// ✅ NEW: Verify QR code (Organizers and Admins)
+router.post('/verify/:token', 
+  authenticationMiddleware, 
+  authorizationMiddleware(['Organizer', 'Admin']), 
+  bookingController.verifyQRCode
+);
+
+// ✅ NEW: Get booking details by token (public - for verification page)
+router.get('/token/:token', bookingController.getBookingByToken);
 
 module.exports = router;
-
-

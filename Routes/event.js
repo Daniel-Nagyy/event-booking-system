@@ -1,26 +1,59 @@
-// routes/eventRoutes.js
 const express = require('express');
 const router = express.Router();
-const userController = require("../Controllers/userController");
 const eventController = require("../Controllers/eventController");
-const authorizationMiddleware = require("../Middleware/authorizationMiddleware");
 const authenticationMiddleware = require("../Middleware/authenticationMiddleware");
+const authorizationMiddleware = require("../Middleware/authorizationMiddleware");
 
-// Public routes (no authentication required)
+// ==========================================
+// ADMIN ROUTES - MUST BE ABSOLUTELY FIRST!
+// ==========================================
+router.get('/all', 
+  authenticationMiddleware,
+  authorizationMiddleware(['Admin']),
+  eventController.getAllEvents
+);
+
+router.patch('/approveevent/:eventId', 
+  authenticationMiddleware,
+  authorizationMiddleware(['Admin']),
+  eventController.approveEvent
+);
+
+router.patch('/decline/:eventId', 
+  authenticationMiddleware,
+  authorizationMiddleware(['Admin']),
+  eventController.declineEvent
+);
+
+// ==========================================
+// PUBLIC ROUTES
+// ==========================================
 router.get('/', eventController.getApprovedEvents);
 
+// ==========================================
+// PROTECTED ROUTES
+// ==========================================
+router.post('/', 
+  authenticationMiddleware,
+  authorizationMiddleware(['Organizer']),
+  eventController.createEvent
+);
 
-router.get('/all', authorizationMiddleware('Admin'), eventController.getAllEvents);
-/*
-leave the getEventDetails down i spent more than 1 hour tring to understand 
-why does the database take all as a parameter for a func that doesnt take parameters 
-the code routes "/all" to "/:id" so leave the /:id routes down
-*/
+router.put('/:id', 
+  authenticationMiddleware,
+  authorizationMiddleware(['Admin', 'Organizer']),
+  eventController.updateEvent
+);
 
-router.post('/', authorizationMiddleware(['Organizer']), eventController.createEvent);
-router.patch('/approveevent/:eventId', authorizationMiddleware(['Admin']), eventController.approveEvent);
-router.patch('/decline/:eventId',authorizationMiddleware(['Admin']),eventController.declineEvent);
+router.delete('/:id', 
+  authenticationMiddleware,
+  authorizationMiddleware(['Organizer', 'Admin']),
+  eventController.deleteEvent
+);
+
+// ==========================================
+// DYNAMIC ROUTE - MUST BE ABSOLUTELY LAST!
+// ==========================================
 router.get('/:id', eventController.getEventDetails);
-router.delete('/:id', authorizationMiddleware(['Organizer','Admin']), eventController.deleteEvent);
-router.put('/:id', authorizationMiddleware(['Admin', 'Organizer']), eventController.updateEvent);
+
 module.exports = router;

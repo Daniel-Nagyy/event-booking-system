@@ -1,24 +1,26 @@
 const eventModel = require('../Models/Event');
 const bookingModel = require('../Models/Booking');
 require("dotenv").config();
-const secretKey = process.env.secretKey;
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const mongoose = require("mongoose");
-require("dotenv").config();
-
 
 const eventController = {
   createEvent: async (req, res) => {
-    const {
-      title, description, location,
-      category, date, time, totalTickets,
-      price
-    } = req.body;
-
-    const organizerId = req.user._id;
-
     try {
+      const {
+        title, description, location, category, 
+        date, time, ticketTypes, image
+      } = req.body;
+
+      const organizerId = req.user._id;
+
+      // Validate ticket types
+      if (!ticketTypes || ticketTypes.length === 0) {
+        return res.status(400).json({ message: "At least one ticket type is required" });
+      }
+
+      // Calculate total tickets
+      const totalTickets = ticketTypes.reduce((sum, ticket) => sum + ticket.quantity, 0);
+
       // Check for duplicate event
       const existingEvent = await eventModel.findOne({ title, date, time });
       if (existingEvent) {
@@ -33,23 +35,89 @@ const eventController = {
         category,
         date,
         time,
+        ticketTypes,
         totalTickets,
-        price,
-        organizer: organizerId
+        remainingTickets: totalTickets,
+        image: image || 'default.jpg',
+        organizer: organizerId,
+        status: 'Pending' // Awaits admin approval
       });
 
       await event.save();
-      return res.status(201).json(event);
+      return res.status(201).json({ 
+        message: 'Event created successfully! Awaiting admin approval.',
+        event 
+      });
     } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Internal server error' });
+      console.error('Error creating event:', error);
+      return res.status(500).json({ message: 'Internal server error', error: error.message });
+    }
+  },
+
+  updateEvent: async (req, res) => {
+    try {
+      const eventId = req.params.id;
+
+      if (!mongoose.Types.ObjectId.isValid(eventId)) {
+        return res.status(400).json({ message: "Invalid event ID" });
+      }
+
+      // Find existing event
+      const existingEvent = await eventModel.findById(eventId);
+      if (!existingEvent) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+
+      // Enforce ownership
+      if (req.user.role === 'Organizer' && String(existingEvent.organizer) !== String(req.user._id)) {
+        return res.status(403).json({ message: "You are not allowed to modify this event" });
+      }
+
+      const { 
+        title, description, date, time, location, category, 
+        ticketTypes, image 
+      } = req.body;
+
+      // Prepare update data
+      const updateData = {};
+      if (title) updateData.title = title;
+      if (description) updateData.description = description;
+      if (date) updateData.date = date;
+      if (time) updateData.time = time;
+      if (location) updateData.location = location;
+      if (category) updateData.category = category;
+      if (image) updateData.image = image;
+
+      // Update ticket types if provided
+      if (ticketTypes && Array.isArray(ticketTypes)) {
+        updateData.ticketTypes = ticketTypes;
+        updateData.totalTickets = ticketTypes.reduce((sum, t) => sum + t.quantity, 0);
+        
+        // Recalculate remaining based on existing bookings
+        const ticketsSold = existingEvent.totalTickets - existingEvent.remainingTickets;
+        updateData.remainingTickets = updateData.totalTickets - ticketsSold;
+      }
+
+      const updatedEvent = await eventModel.findByIdAndUpdate(
+        eventId,
+        { $set: updateData },
+        { new: true, runValidators: true }
+      );
+
+      res.status(200).json({ 
+        message: 'Event updated successfully',
+        event: updatedEvent 
+      });
+    } catch (error) {
+      console.error("Error updating event:", error);
+      res.status(500).json({ message: "Error updating event", error: error.message });
     }
   },
 
   deleteEvent: async (req, res) => {
     const eventId = req.params.id;
     try {
-      // Enforce ownership: organizers can only delete their own events
+      // Enforce ownership
       if (req.user && req.user.role === 'Organizer') {
         const existingEvent = await eventModel.findById(eventId).select('organizer');
         if (!existingEvent) {
@@ -73,16 +141,14 @@ const eventController = {
 
   getEventAnalysis: async (req, res) => {
     try {
-      const organizerId = req.user._id; // Organizer's ID from token/session
+      const organizerId = req.user._id;
 
-      // Find all events organized by this user
       const events = await eventModel.find({ organizer: organizerId });
 
       if (!events.length) {
         return res.status(404).json({ message: 'No events found for this organizer' });
       }
 
-      // Prepare analysis data
       const analysis = events.map(event => {
         const booked = event.totalTickets - event.remainingTickets;
         const percentageBooked = (booked / event.totalTickets) * 100;
@@ -101,11 +167,10 @@ const eventController = {
     }
   },
 
-
   getEventDetails: async (req, res) => {
     try {
       const eventId = req.params.id;
-      const event = await eventModel.findById(eventId);
+      const event = await eventModel.findById(eventId).populate('organizer', 'name email');
   
       if (!event) {
         return res.status(404).json({ message: 'Event not found' });
@@ -118,148 +183,85 @@ const eventController = {
     }
   },
 
-  updateEvent: async (req, res) => {
+  approveEvent: async (req, res) => {
     try {
-      const eventId = req.params.id;
-      console.log('Update event request for ID:', eventId);
-      console.log('Request body:', req.body);
-      console.log('User making request:', req.user);
+      const { eventId } = req.params;
 
-      if (!mongoose.Types.ObjectId.isValid(eventId)) {
-        return res.status(400).json({ message: "Invalid event ID" });
-      }
-
-      // Enforce ownership: organizers can only update their own events
-      if (req.user && req.user.role === 'Organizer') {
-        const existingEvent = await eventModel.findById(eventId).select('organizer');
-        if (!existingEvent) {
-          return res.status(404).json({ message: "Event not found" });
-        }
-        if (String(existingEvent.organizer) !== String(req.user._id)) {
-          return res.status(403).json({ message: "You are not allowed to modify this event" });
-        }
-      }
-
-      const allowedFields = ["title", "description", "date", "time", "location", "category", "totalTickets", "price"];
-      const updateData = {};
-      allowedFields.forEach((field) => {
-        if (req.body[field] !== undefined) {
-          updateData[field] = req.body[field];
-        }
-      });
-
-      console.log('Filtered update data:', updateData);
-
-      const updatedEvent = await eventModel.findByIdAndUpdate(
-        eventId,
-        { $set: updateData },
-        { new: true }
-      );
-
-      if (!updatedEvent) {
+      const event = await eventModel.findById(eventId);
+      if (!event) {
         return res.status(404).json({ message: "Event not found" });
       }
 
-      console.log('Event updated successfully:', updatedEvent);
-      res.status(200).json(updatedEvent);
+      if (event.status === "approved") {
+        return res.status(400).json({ message: "Event is already approved" });
+      }
+
+      event.status = "approved";
+      await event.save();
+
+      res.status(200).json({ message: "Event approved successfully", event });
     } catch (error) {
-      console.error("Error updating event:", error);
-      res.status(500).json({ message: "Error updating event", error: error.message });
+      console.error("Error approving event:", error);
+      res.status(500).json({ message: "Error approving event" });
     }
   },
 
-   getUserConfirmedBookings : async (req, res) => {
+  declineEvent: async (req, res) => {
     try {
-      const userId = req.user._id;
-  
-      const confirmedBookings = await bookingModel.find({
-        user: userId,
-        bookingStatus: "Confirmed"
-      }).populate("event"); // populate event details
-  
-      const events = confirmedBookings.map(booking => booking.event);
-  
-      res.status(200).json({ events });
-    } 
-    catch (error) {
-      console.error("Error fetching confirmed bookings:", error);
-      res.status(500).json({ message: "Error fetching confirmed bookings" });
+      const { eventId } = req.params;
+
+      const event = await eventModel.findById(eventId);
+      if (!event) {
+        return res.status(404).json({ message: "Event not found" });
+      }
+
+      if (event.status === "Cancelled") {
+        return res.status(400).json({ message: "Event is already Cancelled" });
+      }
+
+      event.status = "Cancelled";
+      await event.save();
+
+      res.status(200).json({ message: "Event declined successfully", event });
+    } catch (error) {
+      console.error("Error declining event:", error);
+      res.status(500).json({ message: "Error declining event" });
     }
-},
-approveEvent: async (req, res) => {
-  try {
-    const { eventId } = req.params;
+  },
 
-    const event = await eventModel.findById(eventId);
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
+  getApprovedEvents: async (req, res) => {
+    try {
+      const approvedEvents = await eventModel.find({ status: "approved" })
+        .populate('organizer', 'name email')
+        .sort({ date: 1 });
+
+      res.status(200).json(approvedEvents);
+    } catch (error) {
+      console.error("Error fetching approved events:", error);
+      res.status(500).json({ message: "Server error" });
     }
+  },
 
-    if (event.status === "approved") {
-      return res.status(400).json({ message: "Event is already approved" });
+  getAllEvents: async (req, res) => {
+    try {
+      const events = await eventModel.find().populate('organizer', 'name email').sort({ createdAt: -1 });
+      res.status(200).json(events);
+    } catch (error) {
+      console.error("Error fetching all events:", error);
+      res.status(500).json({ message: "Server error", error: error.message });
     }
+  },
 
-    event.status = "approved";
-    await event.save();
-
-    res.status(200).json({ message: "Event approved successfully", event });
-  } catch (error) {
-    console.error("Error approving event:", error);
-    res.status(500).json({ message: "Error approving event" });
+  getUserEvents: async (req, res) => {
+    try {
+      const organizerId = req.user._id;
+      const events = await eventModel.find({ organizer: organizerId }).sort({ createdAt: -1 });
+      res.status(200).json(events);
+    } catch (error) {
+      console.error("Error fetching user events:", error);
+      res.status(500).json({ message: "Server error" });
+    }
   }
-},
-declineEvent: async (req, res) => {
-  try {
-    const { eventId } = req.params;
-
-    const event = await eventModel.findById(eventId);
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-
-    if (event.status === "Cancelled") {
-      return res.status(400).json({ message: "Event is already Cancelled" });
-    }
-
-    event.status = "Cancelled";
-    await event.save();
-
-    res.status(200).json({ message: "Event declined successfully", event });
-  } catch (error) {
-    console.error("Error declining event:", error);
-    res.status(500).json({ message: "Error declining event" });
-  }
-}
-,
-getApprovedEvents: async (req, res) => {
-  try {
-    const approvedEvents = await eventModel.find({ status: "approved" });
-
-    if (!approvedEvents || approvedEvents.length === 0) {
-      return res.status(404).json({ message: "No approved events found" });
-    }
-
-    res.status(200).json(approvedEvents);
-  } catch (error) {
-    console.error("Error fetching approved events:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-},
-
-getAllEvents: async (req, res) => {
-  try {
-    const events = await eventModel.find();
-
-    if (!events || events.length === 0) {
-      return res.status(404).json({ message: "No events found" });
-    }
-
-    res.status(200).json(events);
-  } catch (error) {
-    console.error("Error fetching all events:", error);
-    res.status(500).json({ message: "Server error" });
-  }
-},
 }
 
 module.exports = eventController;
