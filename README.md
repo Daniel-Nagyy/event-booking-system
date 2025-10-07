@@ -68,6 +68,7 @@ cd frontend
 
 npm run dev
 
+---
 
 ### 💡 Key Features
 
@@ -83,10 +84,12 @@ npm run dev
 
 ✅ Clean and responsive UI using Tailwind CSS
 
+
 ## 📄 License
 
 This project is licensed under the MIT License – see the LICENSE
  file for details.
+ 
 
 ### 👨‍💻 Author
 
@@ -95,6 +98,8 @@ Developed by Daniel Nagy
 
 
 ### Screenshots
+
+
 <img width="1919" height="866" alt="image" src="https://github.com/user-attachments/assets/fd97759c-de29-4a8e-b49d-7be17e9f4138" />
 <img width="1919" height="862" alt="image" src="https://github.com/user-attachments/assets/6b449e45-37ad-42db-8f83-5cc338fef818" />
 <img width="1919" height="867" alt="image" src="https://github.com/user-attachments/assets/69c802c9-89dc-42f9-8e71-816726e37a23" />
