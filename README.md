@@ -47,7 +47,7 @@ The system supports **three distinct user roles** — User, Organizer, and Admin
 
 Follow these steps to run the project locally:
 
-```bash
+
 # 1️⃣ Clone the repository
 git clone https://github.com/Daniel-Nagyy/event-booking-system.git
 
@@ -63,7 +63,7 @@ cd frontend
 # 5️⃣ Run the frontend
 npm run dev
 
-##💡 Key Features
+💡 Key Features
 
 ✅ Secure JWT-based authentication
 ✅ Role-based access control (User / Organizer / Admin)
@@ -72,11 +72,11 @@ npm run dev
 ✅ QR Code ticket verification for event organizers
 ✅ Clean and responsive UI using Tailwind CSS
 
-##📄 License
+📄 License
 
 This project is licensed under the MIT License – see the LICENSE
  file for details.
-##👨‍💻 Author
+👨‍💻 Author
 
 Developed by Daniel Nagy
 📧 For inquiries, reach out danielnagyy@hotmail.com
