@@ -1,65 +1,82 @@
+# 🎟️ Event Ticketing System
 
-# 🎟 Online Event Ticketing System
+A modern full-stack **Event Ticketing Platform** built to simplify the process of event creation, management, and ticket booking.  
+The system supports **three distinct user roles** — User, Organizer, and Admin — each with their own powerful set of features.
 
-## 📌 Project Overview
-This is a **full-stack web application** designed to facilitate browsing, searching, and purchasing of tickets for various events, including concerts, sports games, and theater shows. The system supports different **user roles**, including **standard users, event organizers, and system administrators**, allowing for event management and ticket booking.
+---
 
-## 🎯 Project Objectives
-- Implement **CRUD operations** for users, events, and bookings.
-- Develop a **scalable and interactive** full-stack application using the **MERN stack**.
-- Apply **best practices** in version control, project structuring, and component-based design.
+## 👥 User Roles & Capabilities
 
-## 🛠 Tech Stack
-- **Frontend:** React.js
-- **Backend:** Node.js with Express.js
-- **Database:** MongoDB with Mongoose
-- **Authentication:** JWT-based authentication
-- **Styling:** Chakra UI / Tailwind CSS
-- **Version Control:** Git & GitHub
-- **Payment Integration:** Stripe (for ticket purchases)
-- **Deployment:** Vercel (Frontend) & Render (Backend)
+### 👤 User
+- Explore upcoming events with advanced **search and filter** options (by date, category, or location).  
+- Book tickets and choose from multiple ticket types (Standard, VIP, etc.).  
+- View and manage your **booking history**.  
+- Chat directly with the **integrated chatbot** for any inquiries or help.
 
-## 👥 User Roles
-### **Standard User**
-- Browse and search for events.
-- Book tickets and view booking history.
+### 🧑‍💼 Organizer
+- Create, edit, and delete events easily.  
+- Define flexible **ticket types and pricing**.  
+- Track ticket sales and monitor remaining availability.  
+- **QR Code Scanner** to verify attendee tickets during entry.
 
-### **Event Organizer**
-- Create, update, and delete their own events.
+### 🛡️ Admin
+- Manage users, organizers, and events across the system.  
+- Approve or reject newly submitted event listings.  
+- Remove inappropriate content or accounts.  
+- Access **platform-wide statistics and reports** for monitoring and insights.
 
-### **System Admin**
-- Manage users and events.
-- Have full control over the system.
+---
 
-## ✨ Features
-- **Homepage:** Displays upcoming events with details.
-- **Event Details Page:** View event information and book tickets.
-- **Ticket Booking System:** Select ticket quantity and proceed to checkout.
-- **Search & Filter:** Find events by name, category, date, or location.
-- **User Dashboard:** Manage and view booked tickets.
-- **Admin Panel:** Event organizers can create, edit, and delete events.
-- **Database Integration:** MongoDB for user, event, and booking management.
+## ⚙️ Tech Stack
 
-## 📅 Project Milestones
-### **🔹 Task 1: Version Control & Database Setup**
-- Set up **GitHub repository** & manage branches.
-- Create **Mongoose schemas** for:
-  - Users
-  - Events
-  - Bookings
-- Establish **Git workflows** (branching, PRs, and reviews).
+### 🖥️ Frontend
+- **React** – Component-driven user interfaces  
+- **Tailwind CSS** – Modern utility-first styling  
+- **JWT Authentication** – Secure user sessions  
+- **Axios** – API communication between frontend & backend  
 
-### **🔹 Task 2: Backend Development**
-- Implement **authentication & authorization**.
-- Develop **CRUD operations** for events and bookings.
-- Integrate **ticket booking system**.
+### 💾 Backend
+- **Express.js** – Scalable Node.js server framework  
+- **MongoDB** – NoSQL database for flexible data storage  
+- **Mongoose** – Elegant MongoDB object modeling  
+- **Git** – Version control and collaboration  
 
-### **🔹 Task 3: Frontend Development**
-- Build **homepage, event listings, admin panel, and event details page**.
+---
 
-### **🔹 Task 4: Full Project Integration**
-- Connect **frontend and backend** via **REST APIs**.
+## 🚀 Getting Started
 
-### **🔹 Task 5: Final Testing & Deployment**
-- Perform **bug fixes and optimize performance**.
-- Deploy project to **production**.
+Follow these steps to run the project locally:
+
+```bash
+# 1️⃣ Clone the repository
+git clone https://github.com/Daniel-Nagyy/event-booking-system.git
+
+# 2️⃣ Install dependencies
+npm install
+
+# 3️⃣ Start the backend server
+npm start
+
+# 4️⃣ Move to frontend directory
+cd frontend
+
+# 5️⃣ Run the frontend
+npm run dev
+
+##💡 Key Features
+
+✅ Secure JWT-based authentication
+✅ Role-based access control (User / Organizer / Admin)
+✅ Real-time ticket availability tracking
+✅ Chatbot for quick inquiries
+✅ QR Code ticket verification for event organizers
+✅ Clean and responsive UI using Tailwind CSS
+
+##📄 License
+
+This project is licensed under the MIT License – see the LICENSE
+ file for details.
+##👨‍💻 Author
+
+Developed by Daniel Nagy
+📧 For inquiries, reach out danielnagyy@hotmail.com
