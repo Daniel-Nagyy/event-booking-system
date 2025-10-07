@@ -105,7 +105,7 @@ Developed by Daniel Nagy
 <img width="1919" height="867" alt="image" src="https://github.com/user-attachments/assets/69c802c9-89dc-42f9-8e71-816726e37a23" />
 <img width="1919" height="866" alt="image" src="https://github.com/user-attachments/assets/5cae95c9-cece-4a3c-a426-07634a205cc0" />
 <img width="1919" height="865" alt="image" src="https://github.com/user-attachments/assets/387bc36f-7168-44a8-85f8-697ef3db011f" />
-<img width="1919" height="867" alt="image" src="https://github.com/user-attachments/assets/fc502f2a-b27f-4684-968d-24aa86b1be2a" />
+<img width="1918" height="864" alt="image" src="https://github.com/user-attachments/assets/0f5f356d-b541-4b78-b636-1ef4dcf70f95" />
 <img width="1919" height="867" alt="image" src="https://github.com/user-attachments/assets/31e6390c-c8c2-47d3-924a-bb05cc5cba1f" />
 <img width="1919" height="865" alt="image" src="https://github.com/user-attachments/assets/4c69f0bc-6ded-4d0e-bda5-bc1c04ad18b9" />
 
