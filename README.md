@@ -53,6 +53,9 @@ The system supports **three distinct user roles** — User, Organizer, and Admin
    cd frontend
    npm run dev
 
+   
+---
+
 ### 💡 Key Features
 
 ✅ Secure JWT-based authentication
